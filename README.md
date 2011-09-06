@@ -55,11 +55,15 @@ References, Click Add Reference and locate the jar in your project bin folder.
 Logentries log4J Plugin Setup
 --------------------------------
 
-The first file you need is logentries.jar which is the plugin for log4j. It is available from github at (TBD)
+The first file you need is logentries.jar which is the plugin for log4j. It is available from github at:
+
+	https://github.com/downloads/logentries/le_java/logentries.jar
 
 Place this in the bin folder of your project and add it as a reference as done above with log4j.jar.
 
-The second file required is called log4j.properties and is available on github at (TBD)
+The second file required is called log4j.properties and is available on github at:
+
+	https://github.com/downloads/logentries/le_java/log4j.properties
 
 Add this file to your project as it is the config which adds the plugin for log4J to send logs to Logentries,
 
@@ -74,7 +78,7 @@ following to it:
 	log4j.appender.LE.layout=org.apache.log4j.PatternLayout
 	log4j.appender.LE.layout.ConversionPattern=%d{EEE MMM dd HH:mm:ss ZZZ yyyy}, (%F:%L) %-5p: %m
 
-In this file you will enter your user-key as obtained above with the getKey script in the required
+In this file you will need to enter your user-key as obtained above with the getKey script in the required
 Key value.
 
 You must also include in the required Destination value the name of your host and logfile on Logentries
