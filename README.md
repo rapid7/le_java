@@ -57,13 +57,13 @@ Logentries log4J Plugin Setup
 
 The first file you need is logentries.jar which is the plugin for log4j. It is available from github at:
 
-	https://github.com/downloads/logentries/le_java/logentries.jar
+https://github.com/downloads/logentries/le_java/logentries.jar
 
 Place this in the bin folder of your project and add it as a reference as done above with log4j.jar.
 
 The second file required is called log4j.properties and is available on github at:
 
-	https://github.com/downloads/logentries/le_java/log4j.properties
+https://github.com/downloads/logentries/le_java/log4j.properties
 
 Add this file to your project as it is the config which adds the plugin for log4J to send logs to Logentries,
 
