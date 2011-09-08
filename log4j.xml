@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration debug="true">
+ <appender name="le" class="com.logentries.log4j.LeAppender">
+   <param name="Key" value="ac3dc54c-2084-4c00-9792-2de17e0043bc"/>
+   <param name="Location" value="localhost6/cloudbees"/>
+   <layout class="org.apache.log4j.PatternLayout">
+     <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},
+	 (%F:%L) %-5p: %m"/>
+   </layout>
+ </appender>
+ <logger name="example">
+   <level value="debug"/>
+ </logger>
+   <root>
+     <priority value="debug"></priority>
+     <appender-ref ref="le"/>
+   </root>
+</log4j:configuration>
