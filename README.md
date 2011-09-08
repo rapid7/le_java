@@ -1,7 +1,7 @@
 Logging To Logentries from Java Platform
 ==========================================================
 
-Logentries currently supports Log4J logging from Java
+Logentries currently supports Log4J logging from Java as well as PaaS, such as CloudBees
 
 --------------------------------------------------------------
 
@@ -73,6 +73,15 @@ Key value.
 You must also include in the required Destination value the name of your host and logfile on Logentries
 
 in the following format:        `hostname/logname.log`
+
+---------------------------------------------------
+CloudBees
+
+To use this plugin on CloudBees, please follow all the above instructions and be sure to place both
+
+log4j.jar and logentries.jar in the lib folder of your app. Also place log4j.xml in `/WEB_INF/classes/`
+
+Those are the only difference to use it on CloudBees, below show's how to create the logger inside you classes.
 
 
 Logging Messages
