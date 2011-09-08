@@ -74,7 +74,7 @@ You must also include in the required Destination value the name of your host an
 
 in the following format:        `hostname/logname.log`
 
----------------------------------------------------
+=================================================================
 CloudBees
 
 To use this plugin on CloudBees, please follow all the above instructions and be sure to place both
