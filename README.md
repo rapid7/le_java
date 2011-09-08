@@ -78,7 +78,7 @@ in the following format:        `hostname/logname.log`
 CloudBees
 ========================================
 
-To use this plugin on CloudBees, please follow all the above instructions and be sure to place both
+To use this plugin on CloudBees, please follow all the above instructions but be sure to place both
 
 log4j.jar and logentries.jar in the lib folder of your app. Also place log4j.xml in `/WEB_INF/classes/`
 
