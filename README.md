@@ -67,27 +67,6 @@ https://github.com/downloads/logentries/le_java/log4j.xml
 
 Add this file to your project as it is the config which adds the plugin for log4J to send logs to Logentries,
 
-or create it yourself if you wish. To do so, simply create a a properties file, log4j.properties and add the 
-
-following to it:
-
-	`<?xml version="1.0" encoding="UTF-8"?>
-	<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
-	<log4j:configuration>
-         <appender name="le" class="com.logentries.log4j.LeAppender">
-           <param name="Key" value="YOUR-USER-KEY-HERE"/>
-           <param name="Location" value="YOUR-LOG-DESTINATION-HERE"/>
-           <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},
-	       (%F:%L) %-5p: %m"/>
-           </layout>
-         </appender>
-         <root>
-          <priority value="debug"></priority>
-          <appender-ref ref="le"/>
-         </root>
-        </log4j:configuration>`
-
 In this file you will need to enter your user-key as obtained above with the getKey script in the required
 Key value.
 
