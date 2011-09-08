@@ -71,7 +71,7 @@ or create it yourself if you wish. To do so, simply create a a properties file, 
 
 following to it:
 
-	<?xml version="1.0" encoding="UTF-8"?>
+	`<?xml version="1.0" encoding="UTF-8"?>
 	<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
 	<log4j:configuration>
          <appender name="le" class="com.logentries.log4j.LeAppender">
@@ -86,7 +86,7 @@ following to it:
           <priority value="debug"></priority>
           <appender-ref ref="le"/>
          </root>
-        </log4j:configuration>
+        </log4j:configuration>`
 
 In this file you will need to enter your user-key as obtained above with the getKey script in the required
 Key value.
