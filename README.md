@@ -61,22 +61,32 @@ https://github.com/downloads/logentries/le_java/logentries.jar
 
 Place this in the bin folder of your project and add it as a reference as done above with log4j.jar.
 
-The second file required is called log4j.properties and is available on github at:
+The second file required is called log4j.xml and is available on github at:
 
-https://github.com/downloads/logentries/le_java/log4j.properties
+https://github.com/downloads/logentries/le_java/log4j.xml
 
 Add this file to your project as it is the config which adds the plugin for log4J to send logs to Logentries,
 
-or create it yourself if you wish. To do so, simple create a a properties file, log4j.properties and add the 
+or create it yourself if you wish. To do so, simply create a a properties file, log4j.properties and add the 
 
 following to it:
 
-	log4j.rootLogger=DEBUG, LE
-	log4j.appender.LE=com.logentries.log4j.LeAppender
-	log4j.appender.LE.Key=YOUR-USER-KEY-HERE
-	log4j.appender.LE.Location=YOUR-LOG-DESTINATION-HERE
-	log4j.appender.LE.layout=org.apache.log4j.PatternLayout
-	log4j.appender.LE.layout.ConversionPattern=%d{EEE MMM dd HH:mm:ss ZZZ yyyy}, (%F:%L) %-5p: %m
+	<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+	<log4j:configuration>
+         <appender name="le" class="com.logentries.log4j.LeAppender">
+           <param name="Key" value="YOUR-USER-KEY-HERE"/>
+           <param name="Location" value="YOUR-LOG-DESTINATION-HERE"/>
+           <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},
+	       (%F:%L) %-5p: %m"/>
+           </layout>
+         </appender>
+         <root>
+          <priority value="debug"></priority>
+          <appender-ref ref="le"/>
+         </root>
+        </log4j:configuration>
 
 In this file you will need to enter your user-key as obtained above with the getKey script in the required
 Key value.
