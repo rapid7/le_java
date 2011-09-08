@@ -29,7 +29,7 @@ To configure Log4J, you will need to perform the following:
 
 To obtain your Logentries account key you must download the getKey exe from github at:
 
-    T.B.D
+    https://github.com/downloads/logentries/le_java/getKey.zip
     
 This user-key is essentially a password to your account and is required for each of the steps listed below. To get the key unzip the file you download and run the following from the command line:
 
