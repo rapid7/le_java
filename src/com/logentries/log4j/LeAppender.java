@@ -20,12 +20,16 @@ public class LeAppender extends AppenderSkeleton {
 	private OutputStream conn;
 	protected String key;
 	protected String location;
+	protected boolean debug;
 	
 	public void setKey(String key) { this.key = key; }
 	public String getKey()			{ return this.key; }
 
 	public void setLocation(String location)	{ this.location = location; }
 	public String getLocation()				{ return this.location; }
+	
+	public void setDebug(boolean debug) {this.debug = debug; }
+	public boolean getDebug() { return this.debug; }
 
 
 	/**
@@ -70,7 +74,9 @@ public class LeAppender extends AppenderSkeleton {
 			try{
 				this.createSocket(this.getKey(), this.getLocation());
 			} catch (IOException e) {
-				e.printStackTrace();
+				if(this.getDebug())
+					System.out.println("Unable to connect to Logentries");
+					e.printStackTrace();
 			}
 		}
 		
@@ -81,7 +87,9 @@ public class LeAppender extends AppenderSkeleton {
 				this.createSocket(this.getKey(), this.getLocation());
 				this.conn.write(MESSAGE.getBytes(), 0, MESSAGE.length());
 			} catch (IOException e1) {
-				e.printStackTrace();
+				if(this.getDebug())
+					System.out.println("Unable to transmit to Logentries");
+					e.printStackTrace();
 				return;
 			}
 		}
@@ -89,7 +97,8 @@ public class LeAppender extends AppenderSkeleton {
 			this.conn.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(this.getDebug())
+				e.printStackTrace();
 		}
 	}
 
