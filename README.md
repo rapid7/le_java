@@ -57,7 +57,7 @@ Place this in the bin folder of your project and add it as a reference as done a
 
 The second file required is called log4j.xml and is available on github at:
 
-https://github.com/downloads/logentries/le_java/log4j.xml
+https://github.com/logentries/le_java/raw/master/log4j.xml
 
 Add this file to your project as it is the config which adds the plugin for log4J to send logs to Logentries.
 
