@@ -27,15 +27,9 @@ To configure Log4J, you will need to perform the following:
     * (2) Setup Log4J (if you are not already using it).
     * (3) Configure the Logentries Log4NJ plugin.
 
-To obtain your Logentries account key you must download the getKey exe from github at:
+You can obtain your Logentries account key on the Logentries UI, by clicking account in the top left corner
 
-    https://github.com/downloads/logentries/le_java/getKey.zip
-    
-This user-key is essentially a password to your account and is required for each of the steps listed below. To get the key unzip the file you download and run the following from the command line:
-
-    getKey.exe --key
-
-You will be required to provide your user name and password here. Save the key as you will need this later on. 
+and then display account key on the right.
 
 Log4J Setup
 ------------------
@@ -65,14 +59,32 @@ The second file required is called log4j.xml and is available on github at:
 
 https://github.com/downloads/logentries/le_java/log4j.xml
 
-Add this file to your project as it is the config which adds the plugin for log4J to send logs to Logentries,
+Add this file to your project as it is the config which adds the plugin for log4J to send logs to Logentries.
 
-In this file you will need to enter your user-key as obtained above with the getKey script in the required
-Key value.
+In this file, you will see the following:
 
-You must also include in the required Destination value the name of your host and logfile on Logentries
+	<log4j:configuration debug="true">
+ 	  <appender name="le" class="com.logentries.log4j.LeAppender">
+   	    <param name="LOGENTRIES_ACCOUNT_KEY" value="ac3dc54c-2084-4c00-9792-2de17e0043bc"/>
+            <param name="LOGENTRIES_LOCATION" value="localhost6/cloudbees"/>
+            <param name="Debug" value="true"/>
+            <layout class="org.apache.log4j.PatternLayout">
+              <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},
+                 (%F:%L) %-5p: %m"/>
+            </layout>
+          </appender>
+          <logger name="example">
+            <level value="debug"/>
+          </logger>
+            <root>
+              <priority value="debug"></priority>
+              <appender-ref ref="le"/>
+            </root>
+         </log4j:configuration>
 
-in the following format:        `hostname/logname.log`
+Replace the value "LOGENTRIES_ACCOUNT_KEY" with your account-key obtained earlier. Also replace the "LOGENTRIES_LOCATION" value. The value you provide here will appear in your Logentries account and will be used to identify your machine and log events. This should be in the following format:
+
+        `hostname/logname.log`
 
 
 CloudBees
