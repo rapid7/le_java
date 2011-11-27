@@ -76,11 +76,11 @@ In this file, you will see the following:
           <logger name="example">
             <level value="debug"/>
           </logger>
-            <root>
-              <priority value="debug"></priority>
-              <appender-ref ref="le"/>
-            </root>
-         </log4j:configuration>
+          <root>
+            <priority value="debug"></priority>
+            <appender-ref ref="le"/>
+          </root>
+        </log4j:configuration>
 
 Replace the value "LOGENTRIES_ACCOUNT_KEY" with your account-key obtained earlier. Also replace the "LOGENTRIES_LOCATION" value. The value you provide here will appear in your Logentries account and will be used to identify your machine and log events. This should be in the following format:
 
@@ -115,7 +115,7 @@ Now within your code in that class, you can log using log4J as normal and it wil
 
 Example:
 
-	log.Debug("Debugging Message");
-	log.Info("Informational message");
-	log.Warn("Warning Message");
+	log.debug("Debugging Message");
+	log.info("Informational message");
+	log.warn("Warning Message");
 
