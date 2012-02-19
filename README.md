@@ -69,8 +69,7 @@ In this file, you will see the following:
             <param name="Location" value="LOGENTRIES_LOCATION"/>
             <param name="Debug" value="true"/>
             <layout class="org.apache.log4j.PatternLayout">
-              <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},
-                 (%F:%L) %-5p: %m"/>
+              <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},  (%F:%L) %-5p: %m"/>
             </layout>
           </appender>
           <logger name="example">
