@@ -45,21 +45,30 @@ public class LeAppender extends AppenderSkeleton {
 	 * @param location
 	 * @throws IOException
 	 */
-	public void createSocket(String key, String location) throws IOException {
-
-		SSLSocketFactory factory = (SSLSocketFactory)SSLSocketFactory.getDefault();
-		this.sock = (SSLSocket)factory.createSocket("api.logentries.com", 443);
-		this.sock.setTcpNoDelay(true);
-		this.sock.startHandshake();
-		this.conn = this.sock.getOutputStream();
-		String buff = "PUT /" + key + "/hosts/" + location + "/?realtime=1 HTTP/1.1\r\n";
-		this.conn.write(buff.getBytes());
-		buff = "Host: api.logentries.com\r\n";
-		this.conn.write(buff.getBytes());
-		buff = "Accept-Encoding: identity\r\n";
-		this.conn.write(buff.getBytes());
-		buff = "Transfer_Encoding: chunked\r\n\r\n";
-		this.conn.write(buff.getBytes());
+	 
+	public void activateOptions()
+	{
+		try{
+			SSLSocketFactory factory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+			this.sock = (SSLSocket)factory.createSocket("api.logentries.com", 443);
+			this.sock.setTcpNoDelay(true);
+			this.sock.startHandshake();
+			this.conn = this.sock.getOutputStream();
+			String buff = "PUT /" + this.getKey() + "/hosts/" + this.getLocation() + "/?realtime=1 HTTP/1.1\r\n";
+			this.conn.write(buff.getBytes());
+			buff = "Host: api.logentries.com\r\n";
+			this.conn.write(buff.getBytes());
+			buff = "Accept-Encoding: identity\r\n";
+			this.conn.write(buff.getBytes());
+			buff = "Transfer_Encoding: chunked\r\n\r\n";
+			this.conn.write(buff.getBytes());
+		}catch(IOException e)
+		{
+			if (this.getDebug()){
+				System.err.println("Unable to connect to Logentries");
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -71,13 +80,7 @@ public class LeAppender extends AppenderSkeleton {
 		
 		if(this.conn == null || this.sock == null)
 		{
-			try{
-				this.createSocket(this.getKey(), this.getLocation());
-			} catch (IOException e) {
-				if(this.getDebug())
-					System.out.println("Unable to connect to Logentries");
-					e.printStackTrace();
-			}
+			this.activateOptions();
 		}
 		
 		try {
