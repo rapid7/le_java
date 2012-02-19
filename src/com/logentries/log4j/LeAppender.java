@@ -75,33 +75,42 @@ public class LeAppender extends AppenderSkeleton {
 	 * Implements AppenderSkeleton Append method, handles time and format
 	 */
 	protected void append(LoggingEvent event) {
-
-		String MESSAGE = this.layout.format(event) + "\r\n";
 		
 		if(this.conn == null || this.sock == null)
 		{
 			this.activateOptions();
 		}
 		
+		String MESSAGE = this.layout.format(event)+"\n";
+		String complete = MESSAGE;
 		try {
 			this.conn.write(MESSAGE.getBytes());
-		} catch (IOException e) {
-			try {
-				this.createSocket(this.getKey(), this.getLocation());
-				this.conn.write(MESSAGE.getBytes(), 0, MESSAGE.length());
-			} catch (IOException e1) {
-				if(this.getDebug())
-					System.out.println("Unable to transmit to Logentries");
-					e.printStackTrace();
-				return;
-			}
-		}
-		try {
 			this.conn.flush();
-		} catch (IOException e) {
+
+			String[] stack = event.getThrowableStrRep();
+			if (stack != null)
+			{
+				for(int i = 0; i < stack.length; i++)
+				{
+					complete += stack[i]+"\n";
+					this.conn.write(stack[i].getBytes(), 0, stack[i].length());
+					this.conn.write("\n".getBytes());
+					this.conn.flush();
+				}
+			}
+		}catch (IOException e2) {
 			// TODO Auto-generated catch block
-			if(this.getDebug())
-				e.printStackTrace();
+			if(this.debug){
+				e2.printStackTrace();
+			}
+			try{
+				this.activateOptions();
+				this.conn.write(complete.getBytes());
+				this.conn.flush();
+			}catch(IOException ex){
+				if(this.debug)
+					ex.printStackTrace();
+			}
 		}
 	}
 
