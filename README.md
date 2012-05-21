@@ -1,12 +1,12 @@
-Logging To Logentries from Java Platform
-==========================================================
+Logging To Logentries from Java
+==============================
 
 Logentries currently supports log4j logging from Java as well as PaaS, such as CloudBees
 
 --------------------------------------------------------------
 
 Simple Usage Example
---------------------------------------------------------------
+--------------------
 
 	public class HelloLoggingWorld {
 	
@@ -29,6 +29,7 @@ To configure log4j, you will need to perform the following:
 
 You can obtain your Logentries account key on the Logentries UI, by clicking account in the top left cornercand then display account key on the right.
 
+
 log4j Setup
 -----------
 
@@ -36,26 +37,24 @@ If you don't already have log4j set up in your project, please follow these step
 
 Download log4j from:
 
-http://www.apache.org/dyn/closer.cgi/logging/log4j/1.2.16/apache-log4j-1.2.16.zip
+https://logging.apache.org/log4j/1.2/download.html
 
-Retreive log4j.jar and place it the bin folder of your project.
+Retrieve log4j jar file and place it the bin folder of your project.
 
-Then add a reference to this jar from within your project. This is done simply by right-clicking References, Click Add Reference and locate the jar in your project bin folder.
+Then add a reference to this jar from within your project.
 
 Logentries log4j Plugin Setup
 -----------------------------
 
-The first file you need is logentries.jar which is the plugin for log4j. It is available from github at:
+The first file you need is logentries-VERSION.jar which is the plugin for log4j. It is available from github at:
 
 https://github.com/logentries/le_java/downloads
 
-Place this in the bin folder of your project and add it as a reference as done above with log4j.jar.
+Place this in the libs folder of your project and add it as a reference as done above with log4j jar.
 
-The second file required is called log4j.xml and is available on github at:
+The second file required is called log4j.xml and is available again on github on projects pages.
 
-https://github.com/logentries/le_java/raw/master/log4j.xml
-
-Add this file to your project as it is the config which adds the plugin for log4j to send logs to Logentries.
+Add this file to your project as it is the config which adds the plugin for log4j to send logs to Logentries. This file needs to be in class path.
 
 In this file, you will see the following:
 
@@ -86,7 +85,7 @@ For debugging purposes set the debug parameter to true. The appender will displa
 
 
 CloudBees
-========================================
+=========
 
 To use this plugin on CloudBees, please follow all the above instructions but be sure to place both
 

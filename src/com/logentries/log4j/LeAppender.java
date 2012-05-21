@@ -24,9 +24,6 @@ public class LeAppender extends AppenderSkeleton {
 	/*
 	 * Constants
 	 */
-	
-	/** Version of the Logentries appender. */
-	static final String VERSION = "1.1.3";
 
 	/** Size of the internal event queue. */
 	static final int QUEUE_SIZE = 32768;
@@ -50,6 +47,8 @@ public class LeAppender extends AppenderSkeleton {
 	static final int MAX_DELAY = 10000;
 	/** LE appender signature - used for debugging messages. */
 	static final String LE = "LE ";
+	/** Error message displayed when wrong configuration has been detected. */
+	static final String WRONG_CONFIG = "\n\nIt appears you forgot to customize your log4j.xml file!\n\n";
 
 	/*
 	 * Fields
@@ -263,7 +262,11 @@ public class LeAppender extends AppenderSkeleton {
 	 */
 	public void setKey( String key) {
 		this.key = key;
+
 		dbg( "Setting account key to " + key);
+		if (key.equals( "LOGENTRIES_ACCOUNT_KEY")) {
+			System.err.println( WRONG_CONFIG);
+		}
 	}
 
 	/**
