@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
 <log4j:configuration debug="true">
- <appender name="le" class="com.logentries.log4j.LeAppender">
-   <param name="Key" value="LOGENTRIES_ACCOUNT_KEY"/>
-   <param name="Location" value="LOGENTRIES_LOCATION"/>
-   <param name="Debug" value="true"/>
-   <layout class="org.apache.log4j.PatternLayout">
-     <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},
-	 (%F:%L) %-5p: %m"/>
-   </layout>
- </appender>
- <logger name="example">
-   <level value="debug"/>
- </logger>
-   <root>
-     <priority value="debug"></priority>
-     <appender-ref ref="le"/>
-   </root>
+	<appender name="le" class="com.logentries.log4j.LeAppender">
+		<!-- Enter your Logentries account key, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
+		<param name="Key" value="LOGENTRIES_ACCOUNT_KEY" />
+		<!-- Enter log location, like servername/logname -->
+		<param name="Location" value="LOGENTRIES_LOCATION" />
+		<param name="Debug" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy}, (%F:%L) %-5p: %m" />
+		</layout>
+	</appender>
+	<logger name="example">
+		<level value="debug" />
+	</logger>
+	<root>
+		<priority value="debug"></priority>
+		<appender-ref ref="le" />
+	</root>
 </log4j:configuration>
