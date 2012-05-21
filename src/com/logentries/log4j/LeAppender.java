@@ -24,6 +24,9 @@ public class LeAppender extends AppenderSkeleton {
 	/*
 	 * Constants
 	 */
+	
+	/** Version of the Logentries appender. */
+	static final String VERSION = "1.1.3";
 
 	/** Size of the internal event queue. */
 	static final int QUEUE_SIZE = 32768;

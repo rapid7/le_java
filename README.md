@@ -63,7 +63,8 @@ In this file, you will see the following:
  	  <appender name="le" class="com.logentries.log4j.LeAppender">
    	    <param name="Key" value="LOGENTRIES_ACCOUNT_KEY"/>
         <param name="Location" value="LOGENTRIES_LOCATION"/>
-        <param name="Debug" value="true"/>
+        <param name="Debug" value="false"/>
+		<param name="SSL" value="false" />
         <layout class="org.apache.log4j.PatternLayout">
           <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},  (%F:%L) %-5p: %m"/>
         </layout>
@@ -80,6 +81,8 @@ In this file, you will see the following:
 Replace the value "LOGENTRIES_ACCOUNT_KEY" with your account-key obtained earlier. Also replace the "LOGENTRIES_LOCATION" value. The value you provide here will appear in your Logentries account and will be used to identify your machine and log events. This should be in the following format:
 
     `hostname/logname.log`
+    
+For debugging purposes set the debug parameter to true. The appender will display debug information on console. You can also activate SSL encryption when used in public networks. Note that SSL encryption may be expensive in terms of CPU usage.
 
 
 CloudBees
