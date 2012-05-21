@@ -15,12 +15,15 @@ public class Example {
 	 * @throws InterruptedException
 	 */
 	public static void main( String[] args) throws InterruptedException {
-		log.info( "Info log sent from java class");
-		log.warn( "Warning log sent from java class");
 		
-		System.out.println( "Messages sent, via " +LeAppender.class);
-		System.out.println( System.getProperty( "user.dir"));
-		Thread.sleep( 1000);
+		System.err.println( "Sending warning messages, line by line...");
+		
+		log.info( "Sending warnings, line by line");
+		
+		for (int i=0; i<1000; i++) {
+			log.warn( "Warning message " +i);
+			Thread.sleep( 1000);	
+		}
 	}
 
 }

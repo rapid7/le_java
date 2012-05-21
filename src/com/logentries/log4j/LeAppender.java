@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.AppenderSkeleton;
@@ -44,12 +45,14 @@ public class LeAppender extends AppenderSkeleton {
 	static final int MIN_DELAY = 100;
 	/** Maximal delay between attempts to reconnect in milliseconds. */
 	static final int MAX_DELAY = 10000;
+	/** LE appender signature - used for debugging messages. */
+	static final String LE = "LE ";
 
 	/*
 	 * Fields
 	 */
 
-	/** factory for SSL connections. */
+	/** Factory for SSL connections. */
 	final SSLSocketFactory ssl_factory;
 	/** Account key. */
 	String key;
@@ -84,6 +87,8 @@ public class LeAppender extends AppenderSkeleton {
 		Socket socket;
 		/** Output log stream. */
 		OutputStream stream;
+		/** Random number generator for delays between reconnection attempts. */
+		final Random random = new Random();
 
 		/**
 		 * Initializes the socket appender.
@@ -95,57 +100,70 @@ public class LeAppender extends AppenderSkeleton {
 		}
 
 		/**
-		 * Opens the TCP connection to Logentries.
+		 * Opens connection to Logentries.
 		 * 
-		 * @param key
-		 * @param location
-		 * @throws InterruptedException
 		 * @throws IOException
+		 */
+		void openConnection() throws IOException {
+			final String api_addr = local ? LE_LOCAL_API : LE_API;
+			final int port = local ? LE_LOCAL_PORT : (ssl ? LE_SSL_PORT
+					: LE_PORT);
+
+			dbg( "Reopening connection to Logentries API server " + api_addr
+					+ ":" + port);
+
+			// Open physical connection
+			if (ssl) {
+				SSLSocket s = (SSLSocket) ssl_factory.createSocket( api_addr,
+						LE_SSL_PORT);
+				s.setTcpNoDelay( true);
+				s.startHandshake();
+				socket = s;
+			} else {
+				socket = new Socket( api_addr, port);
+			}
+			stream = socket.getOutputStream();
+
+			// Send identification through HTTP PUT method
+			final String f = "PUT /%s/hosts/%s/?realtime=1 HTTP/1.1\r\n\r\n";
+			final String header = String.format( f, key, location);
+			stream.write( header.getBytes( ASCII));
+
+			dbg( "Connection established");
+		}
+
+		/**
+		 * Tries to opens connection to Logentries until it succeeds.
+		 * 
+		 * @throws InterruptedException
 		 */
 		void reopenConnection() throws InterruptedException {
 			// Close the previous connection
 			closeConnection();
 
 			// Try to open the connection until we get through
-			int delay = MIN_DELAY;
+			int root_delay = MIN_DELAY;
 			while (true) {
 				try {
-					final String api_addr = local ? LE_LOCAL_API : LE_API;
-					final int port = local ? LE_LOCAL_PORT : LE_PORT;
+					openConnection();
 
-					// Open physical connection
-					if (ssl) {
-						SSLSocket s = (SSLSocket) ssl_factory.createSocket(
-								api_addr, LE_SSL_PORT);
-						s.setTcpNoDelay( true);
-						s.startHandshake();
-						socket = s;
-					} else {
-						socket = new Socket( api_addr, port);
-
-					}
-					stream = socket.getOutputStream();
-
-					// Send identification
-					String header = String.format(
-							"PUT /%s/hosts/%s/?realtime=1 HTTP/1.1\r\n\r\n",
-							getKey(), getLocation());
-					stream.write( header.getBytes( ASCII));
-					
-					break;
+					// Success, leave
+					return;
 				} catch (IOException e) {
 					// Get information if in debug mode
-					if (getDebug()) {
-						System.err.println( "Unable to connect to Logentries");
+					if (debug) {
+						dbg( "Unable to connect to Logentries");
 						e.printStackTrace();
 					}
-
-					// Wait between connection attempts
-					delay *= 2;
-					if (delay > MAX_DELAY)
-						delay = MAX_DELAY;
-					Thread.sleep( delay);
 				}
+
+				// Wait between connection attempts
+				root_delay *= 2;
+				if (root_delay > MAX_DELAY)
+					root_delay = MAX_DELAY;
+				int wait_for = root_delay + random.nextInt( root_delay);
+				dbg( "Waiting for " + wait_for + "ms");
+				Thread.sleep( wait_for);
 			}
 		}
 
@@ -201,6 +219,7 @@ public class LeAppender extends AppenderSkeleton {
 				}
 			} catch (InterruptedException e) {
 				// We got interrupted, stop
+				dbg( "Asynchronous socket writer interrupted");
 			}
 
 			closeConnection();
@@ -241,6 +260,7 @@ public class LeAppender extends AppenderSkeleton {
 	 */
 	public void setKey( String key) {
 		this.key = key;
+		dbg( "Setting account key to " + key);
 	}
 
 	/**
@@ -259,6 +279,7 @@ public class LeAppender extends AppenderSkeleton {
 	 */
 	public void setLocation( String location) {
 		this.location = location;
+		dbg( "Setting lcoation to " + location);
 	}
 
 	/**
@@ -278,6 +299,7 @@ public class LeAppender extends AppenderSkeleton {
 	 */
 	public void setDebug( boolean debug) {
 		this.debug = debug;
+		dbg( "Setting debug to " + debug);
 	}
 
 	/**
@@ -296,6 +318,7 @@ public class LeAppender extends AppenderSkeleton {
 	 */
 	public void setSSL( boolean ssl) {
 		this.ssl = ssl;
+		dbg( "Setting SSL to " + ssl);
 	}
 
 	/**
@@ -316,6 +339,8 @@ public class LeAppender extends AppenderSkeleton {
 	 * @param line line to append
 	 */
 	void appendLine( String line) {
+		dbg( "Queueing " + line);
+
 		// Convert the line to byte data
 		byte[] data = (line + '\n').getBytes( UTF8);
 
@@ -340,6 +365,7 @@ public class LeAppender extends AppenderSkeleton {
 		if (!checkCredentials())
 			return;
 		if (!started) {
+			dbg( "Starting asynchronous socket appender");
 			appender.start();
 			started = true;
 		}
@@ -361,11 +387,22 @@ public class LeAppender extends AppenderSkeleton {
 	@Override
 	public void close() {
 		appender.interrupt();
+		dbg( "Closing asynchronous socket appender");
 	}
 
 	@Override
 	public boolean requiresLayout() {
 		return true;
+	}
+
+	/**
+	 * Prints the message given. Used for internal debugging.
+	 * 
+	 * @param msg message to display
+	 */
+	void dbg( String msg) {
+		if (debug)
+			System.err.println( LE + msg);
 	}
 
 }

@@ -6,10 +6,11 @@
 		<param name="Key" value="LOGENTRIES_ACCOUNT_KEY" />
 		<!-- Enter log location, like servername/logname -->
 		<param name="Location" value="LOGENTRIES_LOCATION" />
-		<param name="Debug" value="true" />
+		<param name="Debug" value="false" />
+		<param name="SSL" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy}, (%F:%L) %-5p: %m" />
+				value="%d{yyyy-MM-dd HH:mm:ss ZZZ} %-5p (%F:%L)  %m" />
 		</layout>
 	</appender>
 	<logger name="example">
