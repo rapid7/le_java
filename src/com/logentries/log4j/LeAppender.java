@@ -285,7 +285,7 @@ public class LeAppender extends AppenderSkeleton {
 	 */
 	public void setLocation( String location) {
 		this.location = location;
-		dbg( "Setting lcoation to " + location);
+		dbg( "Setting location to " + location);
 	}
 
 	/**
