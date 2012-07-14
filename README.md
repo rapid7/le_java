@@ -77,7 +77,7 @@ In this file, you will see the following:
       </root>
     </log4j:configuration>
 
-Replace the value "LOGENTRIES_ACCOUNT_KEY" with your account-key obtained earlier. Also replace the "LOGENTRIES_LOCATION" value. The value you provide here will appear in your Logentries account and will be used to identify your machine and log events. This should be in the following format:
+Replace the value "LOGENTRIES_ACCOUNT_KEY" with your account-key obtained earlier. Also replace the "LOGENTRIES_LOCATION" value. This should be in the following format:
 
     `hostname/logname.log`
     
