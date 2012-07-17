@@ -51,7 +51,7 @@ public class LeAppender extends AppenderSkeleton {
 	/** Error message displayed when wrong configuration has been detected. */
 	static final String WRONG_CONFIG = "\n\nIt appears you forgot to customize your log4j.xml file!\n\n";
 	/** Error message displayed when invalid API key is detected. */
-    static final String INVALID_KEY = "\n\nIt appears your LOGENTRIES_ACCOUNT_KEY parameter in log4j.xml is invalid!\n\n";
+	static final String INVALID_KEY = "\n\nIt appears your LOGENTRIES_ACCOUNT_KEY parameter in log4j.xml is invalid!\n\n";
 	/*
 	 * Fields
 	 */
