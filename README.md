@@ -46,7 +46,7 @@ Then add a reference to this jar from within your project.
 Logentries log4j Plugin Setup
 -----------------------------
 
-The first file you need is logentries-VERSION.jar which is the plugin for log4j. It is available from github at:
+The first file you need is logentries-1.1.4.jar which is the plugin for log4j. It is available from github at:
 
 https://github.com/logentries/le_java/downloads
 
