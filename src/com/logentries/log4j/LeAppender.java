@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.AppenderSkeleton;
@@ -49,7 +50,8 @@ public class LeAppender extends AppenderSkeleton {
 	static final String LE = "LE ";
 	/** Error message displayed when wrong configuration has been detected. */
 	static final String WRONG_CONFIG = "\n\nIt appears you forgot to customize your log4j.xml file!\n\n";
-
+	/** Error message displayed when invalid API key is detected. */
+    static final String INVALID_KEY = "\n\nIt appears your LOGENTRIES_ACCOUNT_KEY parameter in log4j.xml is invalid!\n\n";
 	/*
 	 * Fields
 	 */
@@ -252,7 +254,18 @@ public class LeAppender extends AppenderSkeleton {
 	 * Checks that key and location are set.
 	 */
 	boolean checkCredentials() {
-		return key != null && location != null;
+		if (key == null || location == null)
+			return false;
+		
+		//Quick test to see if ACCOUNT_KEY is a valid UUID
+		UUID u = UUID.fromString(key);
+		if (!u.toString().equals(key))
+		{
+			dbg(INVALID_KEY);
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
