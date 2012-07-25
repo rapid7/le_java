@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<!DOCTYPE log4j:configuration>
 <log4j:configuration debug="true">
 	<appender name="le" class="com.logentries.log4j.LeAppender">
 		<!-- Enter your Logentries account key, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
