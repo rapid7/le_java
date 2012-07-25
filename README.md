@@ -58,7 +58,7 @@ Add this file to your project as it is the config which adds the plugin for log4
 
 In this file, you will see the following:
 
-	`<?xml version="1.0" encoding="UTF-8"?>
+	<?xml version="1.0" encoding="UTF-8"?>
 	<!DOCTYPE log4j:configuration>
 	<log4j:configuration debug="true">
 	<appender name="le" class="com.logentries.log4j.LeAppender">
@@ -80,7 +80,7 @@ In this file, you will see the following:
 		<priority value="debug"></priority>
 		<appender-ref ref="le" />
 	</root>
-	</log4j:configuration>`
+	</log4j:configuration>
 
 Replace the value "LOGENTRIES_ACCOUNT_KEY" with your account-key obtained earlier. Also replace the "LOGENTRIES_LOCATION" value. This should be in the following format:
 
