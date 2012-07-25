@@ -39,22 +39,22 @@ Download log4j from:
 
 https://logging.apache.org/log4j/1.2/download.html
 
-Retrieve log4j jar file and place it the bin folder of your project.
+Retrieve log4j jar file and place it the `WEB-INF/lib` folder of your project.
 
-Then add a reference to this jar from within your project.
+Then add it to the build path from within your project.
 
 Logentries log4j Plugin Setup
 -----------------------------
 
-The first file you need is logentries-1.1.4.jar which is the plugin for log4j. It is available from github at:
+The next file you need is logentries-1.1.4.jar which is the plugin for log4j. It is available from github at:
 
 https://github.com/logentries/le_java/downloads
 
-Place this in the libs folder of your project and add it as a reference as done above with log4j jar.
+Place this in the `WEB-INF/lib` folder of your project and add it to the buildpath as done above with log4j jar.
 
 The second file required is called log4j.xml and is available again on github on projects pages.
 
-Add this file to your project as it is the config which adds the plugin for log4j to send logs to Logentries. This file needs to be in class path.
+Add this file to your project as it is the config which adds the plugin for log4j to send logs to Logentries. This file should be in `WEB-INF/classes`
 
 In this file, you will see the following:
 
@@ -82,16 +82,6 @@ Replace the value "LOGENTRIES_ACCOUNT_KEY" with your account-key obtained earlie
     `hostname/logname.log`
     
 For debugging purposes set the debug parameter to true. The appender will display debug information on console. You can also activate SSL encryption when used in public networks. Note that SSL encryption may be expensive in terms of CPU usage.
-
-
-CloudBees
-=========
-
-To use this plugin on CloudBees, please follow all the above instructions but be sure to place both
-
-log4j.jar and logentries.jar in the lib folder of your app. Also place log4j.xml in `/WEB_INF/classes/`
-
-Those are the only difference to use it on CloudBees, below show's how to create the logger inside you classes.
 
 
 Logging Messages
