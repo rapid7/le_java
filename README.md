@@ -58,24 +58,29 @@ Add this file to your project as it is the config which adds the plugin for log4
 
 In this file, you will see the following:
 
+	`<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE log4j:configuration>
 	<log4j:configuration debug="true">
- 	  <appender name="le" class="com.logentries.log4j.LeAppender">
-   	    <param name="Key" value="LOGENTRIES_ACCOUNT_KEY"/>
-        <param name="Location" value="LOGENTRIES_LOCATION"/>
-        <param name="Debug" value="false"/>
+	<appender name="le" class="com.logentries.log4j.LeAppender">
+		<!-- Enter your Logentries account key, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
+		<param name="Key" value="LOGENTRIES_ACCOUNT_KEY" />
+		<!-- Enter log location, like servername/logname -->
+		<param name="Location" value="LOGENTRIES_LOCATION" />
+		<param name="Debug" value="false" />
 		<param name="SSL" value="false" />
-        <layout class="org.apache.log4j.PatternLayout">
-          <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},  (%F:%L) %-5p: %m"/>
-        </layout>
-      </appender>
-      <logger name="example">
-        <level value="debug"/>
-      </logger>
-      <root>
-        <priority value="debug"></priority>
-        <appender-ref ref="le"/>
-      </root>
-    </log4j:configuration>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy-MM-dd HH:mm:ss ZZZ} %-5p (%F:%L)  %m" />
+		</layout>
+	</appender>
+	<logger name="example">
+		<level value="debug" />
+	</logger>
+	<root>
+		<priority value="debug"></priority>
+		<appender-ref ref="le" />
+	</root>
+	</log4j:configuration>`
 
 Replace the value "LOGENTRIES_ACCOUNT_KEY" with your account-key obtained earlier. Also replace the "LOGENTRIES_LOCATION" value. This should be in the following format:
 
