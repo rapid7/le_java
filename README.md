@@ -23,12 +23,15 @@ Simple Usage Example
 
 To configure log4j, you will need to perform the following:
 
-    * (1) Obtain your Logentries account key.
+    * (1) Setup your Logentries account.
     * (2) Setup Log4j (if you are not already using it).
     * (3) Configure the Logentries Log4j plugin.
 
-You can obtain your Logentries account key on the Logentries UI, by clicking account in the top left cornercand then display account key on the right.
-
+Account Setup
+-------------
+You can sign up for a Logentries account simply by clicking Sign Up and entering your email address. Once you have your credentials and have logged in,
+create a new host in the UI with a name that represents your app. Then, select this host and create a new logfile with a name that represents what you're
+logging. Select 'TOKEN TCP' as the source_type and click Register to create the log.
 
 log4j Setup
 -----------
@@ -46,7 +49,7 @@ Then add it to the build path from within your project.
 Logentries log4j Plugin Setup
 -----------------------------
 
-The next file you need is logentries-1.1.4.jar which is the plugin for log4j. It is available from github at:
+The next file you need is logentries-1.1.5.jar which is the plugin for log4j. It is available from github at:
 
 https://github.com/logentries/le_java/downloads
 
@@ -54,7 +57,7 @@ Place this in the `WEB-INF/lib` folder of your project and add it to the buildpa
 
 The second file required is called log4j.xml and is available again on github on projects pages.
 
-Add this file to your project as it is the config which adds the plugin for log4j to send logs to Logentries. This file should be in `WEB-INF/classes`
+Add this file to your project as it is the config which adds the plugin for log4j to send logs to Logentries. This file should be in added to the classpath.
 
 In this file, you will see the following:
 
@@ -62,12 +65,9 @@ In this file, you will see the following:
 	<!DOCTYPE log4j:configuration>
 	<log4j:configuration debug="true">
 	<appender name="le" class="com.logentries.log4j.LeAppender">
-		<!-- Enter your Logentries account key, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
-		<param name="Key" value="LOGENTRIES_ACCOUNT_KEY" />
-		<!-- Enter log location, like servername/logname -->
-		<param name="Location" value="LOGENTRIES_LOCATION" />
+		<!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
+		<param name="Token" value="LOGENTRIES_TOKEN" />
 		<param name="Debug" value="false" />
-		<param name="SSL" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{yyyy-MM-dd HH:mm:ss ZZZ} %-5p (%F:%L)  %m" />
@@ -82,11 +82,9 @@ In this file, you will see the following:
 	</root>
 	</log4j:configuration>
 
-Replace the value "LOGENTRIES_ACCOUNT_KEY" with your account-key obtained earlier. Also replace the "LOGENTRIES_LOCATION" value. This should be in the following format:
-
-    `hostname/logname.log`
+Replace the value "LOGENTRIES_TOKEN" with the token UUID that appears beside your newly created logfile in grey.
     
-For debugging purposes set the debug parameter to true. The appender will display debug information on console. You can also activate SSL encryption when used in public networks. Note that SSL encryption may be expensive in terms of CPU usage.
+For debugging purposes set the debug parameter to true. The appender will display debug information on console.
 
 
 Logging Messages

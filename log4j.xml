@@ -2,12 +2,9 @@
 <!DOCTYPE log4j:configuration>
 <log4j:configuration debug="true">
 	<appender name="le" class="com.logentries.log4j.LeAppender">
-		<!-- Enter your Logentries account key, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
-		<param name="Key" value="LOGENTRIES_ACCOUNT_KEY" />
-		<!-- Enter log location, like servername/logname -->
-		<param name="Location" value="LOGENTRIES_LOCATION" />
+		<!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
+		<param name="Token" value="LOGENTRIES_TOKEN" />
 		<param name="Debug" value="false" />
-		<param name="SSL" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{yyyy-MM-dd HH:mm:ss ZZZ} %-5p (%F:%L)  %m" />

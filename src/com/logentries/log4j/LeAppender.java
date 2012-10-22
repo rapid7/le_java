@@ -10,8 +10,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Logentries appender for log4j.
@@ -32,10 +30,8 @@ public class LeAppender extends AppenderSkeleton {
 	static final String LE_API = "api.logentries.com";
 	/** Logentries local API server address for testing. */
 	static final String LE_LOCAL_API = "localhost";
-	/** Default port number for Logentries API server. */
-	static final int LE_PORT = 80;
-	/** Default SSL port number for Logentries API server. */
-	static final int LE_SSL_PORT = 443;
+	/** Port number for Token logging on Logentries API server. */
+	static final int LE_PORT = 10000;
 	/** Local port number for testing. */
 	static final int LE_LOCAL_PORT = 8088;
 	/** UTF-8 output character set. */
@@ -48,22 +44,14 @@ public class LeAppender extends AppenderSkeleton {
 	static final int MAX_DELAY = 10000;
 	/** LE appender signature - used for debugging messages. */
 	static final String LE = "LE ";
-	/** Error message displayed when wrong configuration has been detected. */
-	static final String WRONG_CONFIG = "\n\nIt appears you forgot to customize your log4j.xml file!\n\n";
 	/** Error message displayed when invalid API key is detected. */
-	static final String INVALID_KEY = "\n\nIt appears your LOGENTRIES_ACCOUNT_KEY parameter in log4j.xml is invalid!\n\n";
+	static final String INVALID_TOKEN = "\n\nIt appears your LOGENTRIES_TOKEN parameter in log4j.xml is incorrect!\n\n";
 	/*
 	 * Fields
 	 */
 
-	/** Factory for SSL connections. */
-	final SSLSocketFactory ssl_factory;
-	/** Account key. */
-	String key;
-	/** Log location. */
-	String location;
-	/** Use SSL indicator. */
-	boolean ssl;
+	/** Destination Token. */
+	String token;
 	/** Debug flag. */
 	boolean debug;
 	/** Make local connection only. */
@@ -110,28 +98,15 @@ public class LeAppender extends AppenderSkeleton {
 		 */
 		void openConnection() throws IOException {
 			final String api_addr = local ? LE_LOCAL_API : LE_API;
-			final int port = local ? LE_LOCAL_PORT : (ssl ? LE_SSL_PORT
-					: LE_PORT);
+			final int port = local ? LE_LOCAL_PORT : LE_PORT;
 
 			dbg( "Reopening connection to Logentries API server " + api_addr
 					+ ":" + port);
 
 			// Open physical connection
-			if (ssl) {
-				SSLSocket s = (SSLSocket) ssl_factory.createSocket( api_addr,
-						LE_SSL_PORT);
-				s.setTcpNoDelay( true);
-				s.startHandshake();
-				socket = s;
-			} else {
-				socket = new Socket( api_addr, port);
-			}
+			socket = new Socket( api_addr, port);
+			
 			stream = socket.getOutputStream();
-
-			// Send identification through HTTP PUT method
-			final String f = "PUT /%s/hosts/%s/?realtime=1 HTTP/1.1\r\n\r\n";
-			final String header = String.format( f, key, location);
-			stream.write( header.getBytes( ASCII));
 
 			dbg( "Connection established");
 		}
@@ -237,7 +212,7 @@ public class LeAppender extends AppenderSkeleton {
 	 */
 	LeAppender( boolean local) {
 		this.local = local;
-		ssl_factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+		
 		queue = new ArrayBlockingQueue<byte[]>( QUEUE_SIZE);
 
 		appender = new SocketAppender();
@@ -254,14 +229,14 @@ public class LeAppender extends AppenderSkeleton {
 	 * Checks that key and location are set.
 	 */
 	boolean checkCredentials() {
-		if (key == null || location == null)
+		if (token == null)
 			return false;
 		
-		//Quick test to see if ACCOUNT_KEY is a valid UUID
-		UUID u = UUID.fromString(key);
-		if (!u.toString().equals(key))
+		//Quick test to see if LOGENTRIES_TOKEN is a valid UUID
+		UUID u = UUID.fromString(token);
+		if (!u.toString().equals(token))
 		{
-			dbg(INVALID_KEY);
+			dbg(INVALID_TOKEN);
 			return false;
 		}
 		
@@ -269,45 +244,22 @@ public class LeAppender extends AppenderSkeleton {
 	}
 
 	/**
-	 * Sets the account key.
+	 * Sets the token
 	 * 
-	 * @param key account key
+	 * @param token new token
 	 */
-	public void setKey( String key) {
-		this.key = key;
-
-		dbg( "Setting account key to " + key);
-		if (key.equals( "LOGENTRIES_ACCOUNT_KEY")) {
-			System.err.println( WRONG_CONFIG);
-		}
+	public void setToken( String token) {
+		this.token = token;
+		dbg( "Setting token to " + token);
 	}
 
 	/**
-	 * Returns the account key.
+	 * Returns current token.
 	 * 
-	 * @return account key
+	 * @return current token
 	 */
-	public String getKey() {
-		return key;
-	}
-
-	/**
-	 * Sets the location
-	 * 
-	 * @param location new location
-	 */
-	public void setLocation( String location) {
-		this.location = location;
-		dbg( "Setting location to " + location);
-	}
-
-	/**
-	 * Returns current location.
-	 * 
-	 * @return current location
-	 */
-	public String getLocation() {
-		return location;
+	public String getToken() {
+		return token;
 	}
 
 	/**
@@ -331,25 +283,6 @@ public class LeAppender extends AppenderSkeleton {
 	}
 
 	/**
-	 * Sets to use SSL for connection with API server.
-	 * 
-	 * @param ssl true to enable SSL encryption
-	 */
-	public void setSSL( boolean ssl) {
-		this.ssl = ssl;
-		dbg( "Setting SSL to " + ssl);
-	}
-
-	/**
-	 * Returns current state of SSL connection settings.
-	 * 
-	 * @return true if SSL is set
-	 */
-	public boolean getSSL() {
-		return ssl;
-	}
-
-	/**
 	 * Appends the data to internal queue to be send over the network.
 	 * 
 	 * It does not block. If the queue is full, it removes latest event first to
@@ -361,7 +294,7 @@ public class LeAppender extends AppenderSkeleton {
 		dbg( "Queueing " + line);
 
 		// Convert the line to byte data
-		byte[] data = (line + '\n').getBytes( UTF8);
+		byte[] data = (token + line + '\n').getBytes( UTF8);
 
 		// Try to append data to queue
 		boolean is_full = !queue.offer( data);
@@ -384,7 +317,7 @@ public class LeAppender extends AppenderSkeleton {
 		if (!checkCredentials())
 			return;
 		if (!started) {
-			dbg( "Starting asynchronous socket appender");
+			dbg( "Starting Logentries asynchronous socket appender");
 			appender.start();
 			started = true;
 		}
@@ -406,7 +339,7 @@ public class LeAppender extends AppenderSkeleton {
 	@Override
 	public void close() {
 		appender.interrupt();
-		dbg( "Closing asynchronous socket appender");
+		dbg( "Closing Logentries asynchronous socket appender");
 	}
 
 	@Override
