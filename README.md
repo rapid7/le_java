@@ -62,7 +62,7 @@ Add this file to your project as it is the config which adds the plugin for log4
 In this file, you will see the following:
 
 	<?xml version="1.0" encoding="UTF-8"?>
-	<!DOCTYPE log4j:configuration>
+	<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 	<log4j:configuration debug="true">
 	<appender name="le" class="com.logentries.log4j.LeAppender">
 		<!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
