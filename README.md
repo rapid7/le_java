@@ -49,7 +49,7 @@ Then add it to the build path from within your project.
 Logentries log4j Plugin Setup
 -----------------------------
 
-The next file you need is logentries-1.1.5.jar which is the plugin for log4j. It is available from github at:
+The next file you need is logentriesappender-1.1.5.jar which is the plugin for log4j. It is available from github at:
 
 https://github.com/logentries/le_java/downloads
 
@@ -64,7 +64,7 @@ In this file, you will see the following:
 	<?xml version="1.0" encoding="UTF-8"?>
 	<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 	<log4j:configuration debug="true">
-	<appender name="le" class="com.logentries.log4j.LeAppender">
+	<appender name="le" class="com.logentries.log4j.LogentriesAppender">
 		<!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
 		<param name="Token" value="LOGENTRIES_TOKEN" />
 		<param name="Debug" value="false" />
