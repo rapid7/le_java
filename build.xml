@@ -1,4 +1,4 @@
-<project name="leappender" basedir="." default="jar">
+<project name="logentriesappender" basedir="." default="jar">
 
 	<property file="build.properties"/>
 	
@@ -25,7 +25,7 @@
 	
 	<target name="jar" depends="compile">
 		<!-- Build the jar file -->
-		<jar basedir="${build.dir}" destfile="${dest.dir}/leappender-${version}.jar"/>
+		<jar basedir="${build.dir}" destfile="${dest.dir}/logentriesappender-${version}.jar"/>
 	</target>
 	
 </project>
