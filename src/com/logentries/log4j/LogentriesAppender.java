@@ -14,16 +14,20 @@ import org.apache.log4j.spi.LoggingEvent;
 /**
  * Logentries appender for log4j.
  * 
+ * VERSION: 1.1.6
+ * 
  * @author Viliam Holub
  * @author Mark Lacomber
  * 
  */
-public class LeAppender extends AppenderSkeleton {
+public class LogentriesAppender extends AppenderSkeleton {
 
 	/*
 	 * Constants
 	 */
 
+	/** Current Version number of library/ */
+	static final String VERSION = "1.1.6";
 	/** Size of the internal event queue. */
 	static final int QUEUE_SIZE = 32768;
 	/** Logentries API server address. */
@@ -62,7 +66,7 @@ public class LeAppender extends AppenderSkeleton {
 	/** Asynchronous socket appender. */
 	SocketAppender appender;
 	/** Message queue. */
-	ArrayBlockingQueue<byte[]> queue;
+	ArrayBlockingQueue<String> queue;
 
 	/*
 	 * Internal classes
@@ -181,12 +185,21 @@ public class LeAppender extends AppenderSkeleton {
 				// Send data in queue
 				while (true) {
 					// Take data from queue
-					byte[] data = queue.take();
+					String data = queue.take();
 
+					// Replace newlines with line separator to format multi-line events nicely
+					data = data.replace('\n', '\u2028');
+					
+					// Add newline to end the event
+					data += '\n';
+					
+					// Get bytes of final event
+					byte[] finalLine = data.getBytes(UTF8);
+					
 					// Send data, reconnect if needed
 					while (true) {
 						try {
-							stream.write( data);
+							stream.write( finalLine);
 							stream.flush();
 						} catch (IOException e) {
 							// Reopen the lost connection
@@ -210,10 +223,10 @@ public class LeAppender extends AppenderSkeleton {
 	 * 
 	 * @param local make local connection to API server for testing
 	 */
-	LeAppender( boolean local) {
+	LogentriesAppender( boolean local) {
 		this.local = local;
 		
-		queue = new ArrayBlockingQueue<byte[]>( QUEUE_SIZE);
+		queue = new ArrayBlockingQueue<String>( QUEUE_SIZE);
 
 		appender = new SocketAppender();
 	}
@@ -221,7 +234,7 @@ public class LeAppender extends AppenderSkeleton {
 	/**
 	 * Initializes asynchronous logging.
 	 */
-	public LeAppender() {
+	public LogentriesAppender() {
 		this( false);
 	}
 
@@ -293,8 +306,8 @@ public class LeAppender extends AppenderSkeleton {
 	void appendLine( String line) {
 		dbg( "Queueing " + line);
 
-		// Convert the line to byte data
-		byte[] data = (token + line + '\n').getBytes( UTF8);
+		// Prefix the data with Token
+		String data = token + line;
 
 		// Try to append data to queue
 		boolean is_full = !queue.offer( data);
@@ -314,23 +327,24 @@ public class LeAppender extends AppenderSkeleton {
 	@Override
 	protected void append( LoggingEvent event) {
 		// Check that we have all parameters set and socket appender running
-		if (!checkCredentials())
-			return;
-		if (!started) {
+		if (!started && checkCredentials()) {
 			dbg( "Starting Logentries asynchronous socket appender");
 			appender.start();
 			started = true;
 		}
 
-		// Append message content
-		appendLine( layout.format( event));
+		// Render the event according to layout
+		String formattedEvent = layout.format( event);
 
 		// Append stack trace if present
 		final String[] stack = event.getThrowableStrRep();
-		if (stack != null) {
-			for (String line : stack)
-				appendLine( line);
+		if (stack != null)
+		{
+			formattedEvent += stack.toString();
 		}
+		
+		// Prepare to be queued
+		appendLine(formattedEvent);
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration debug="true">
-	<appender name="le" class="com.logentries.log4j.LeAppender">
+	<appender name="le" class="com.logentries.log4j.LogentriesAppender">
 		<!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
 		<param name="Token" value="LOGENTRIES_TOKEN" />
 		<param name="Debug" value="false" />
