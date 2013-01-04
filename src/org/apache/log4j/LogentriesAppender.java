@@ -1,4 +1,4 @@
-package com.logentries.log4j;
+package org.apache.log4j;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -187,7 +187,7 @@ public class LogentriesAppender extends AppenderSkeleton {
 					// Take data from queue
 					String data = queue.take();
 
-					// Replace newlines with line separator to format multi-line events nicely
+					// Replace newlines with line separator character to format multi-line events nicely in Logentries UI
 					data = data.replace('\n', '\u2028');
 					
 					// Add newline to end the event
@@ -337,12 +337,19 @@ public class LogentriesAppender extends AppenderSkeleton {
 		String formattedEvent = layout.format( event);
 
 		// Append stack trace if present
-		final String[] stack = event.getThrowableStrRep();
+		String[] stack = event.getThrowableStrRep();
 		if (stack != null)
 		{
-			formattedEvent += stack.toString();
+			int len = stack.length;
+			formattedEvent += ", ";
+			for(int i = 0; i < len; i++)
+			{
+				formattedEvent += stack[i];
+				if(i < len - 1)
+					formattedEvent += "\u2028";
+			}
 		}
-		
+				
 		// Prepare to be queued
 		appendLine(formattedEvent);
 	}
