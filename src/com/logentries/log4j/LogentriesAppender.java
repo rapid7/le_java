@@ -1,4 +1,4 @@
-package org.apache.log4j;
+package com.logentries.log4j;
 
 import java.io.IOException;
 import java.io.OutputStream;
