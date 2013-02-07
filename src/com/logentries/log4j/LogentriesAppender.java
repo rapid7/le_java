@@ -192,7 +192,7 @@ public class LogentriesAppender extends AppenderSkeleton {
 					String data = queue.take();
 
 					// Replace platform-independent carriage return with unicode line separator character to format multi-line events nicely in Logentries UI
-					data = data.replace(LINE_SEP, '\u2028');
+					data = data.replace(LINE_SEP, "\u2028");
 					
 					// Add newline to end the event
 					data += '\n';
