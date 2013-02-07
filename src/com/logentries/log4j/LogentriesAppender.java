@@ -14,7 +14,7 @@ import org.apache.log4j.spi.LoggingEvent;
 /**
  * Logentries appender for log4j.
  * 
- * VERSION: 1.1.6
+ * VERSION: 1.1.7
  * 
  * @author Viliam Holub
  * @author Mark Lacomber
@@ -27,35 +27,39 @@ public class LogentriesAppender extends AppenderSkeleton {
 	 */
 
 	/** Current Version number of library/ */
-	static final String VERSION = "1.1.6";
+	static final String VERSION = "1.1.7";
 	/** Size of the internal event queue. */
-	static final int QUEUE_SIZE = 32768;
+	private static final int QUEUE_SIZE = 32768;
 	/** Logentries API server address. */
-	static final String LE_API = "api.logentries.com";
+	private static final String LE_API = "api.logentries.com";
 	/** Logentries local API server address for testing. */
-	static final String LE_LOCAL_API = "localhost";
+	private static final String LE_LOCAL_API = "localhost";
 	/** Port number for Token logging on Logentries API server. */
-	static final int LE_PORT = 10000;
+	private static final int LE_PORT = 10000;
 	/** Local port number for testing. */
-	static final int LE_LOCAL_PORT = 8088;
+	private static final int LE_LOCAL_PORT = 8088;
 	/** UTF-8 output character set. */
-	static final Charset UTF8 = Charset.forName( "UTF-8");
-	/** ASCII character set used by HTTP. */
-	static final Charset ASCII = Charset.forName( "US-ASCII");
+	private static final Charset UTF8 = Charset.forName( "UTF-8");
 	/** Minimal delay between attempts to reconnect in milliseconds. */
-	static final int MIN_DELAY = 100;
+	private static final int MIN_DELAY = 100;
 	/** Maximal delay between attempts to reconnect in milliseconds. */
-	static final int MAX_DELAY = 10000;
+	private static final int MAX_DELAY = 10000;
 	/** LE appender signature - used for debugging messages. */
-	static final String LE = "LE ";
+	private static final String LE = "LE ";
 	/** Error message displayed when invalid API key is detected. */
-	static final String INVALID_TOKEN = "\n\nIt appears your LOGENTRIES_TOKEN parameter in log4j.xml is incorrect!\n\n";
+	private static final String INVALID_TOKEN = "\n\nIt appears your LOGENTRIES_TOKEN parameter in log4j.xml is incorrect!\n\n";
+	/** Key Value for Token Environment Variable. */
+	private static final String CONFIG_TOKEN = "LOGENTRIES_TOKEN";
+	/** Platform dependent line separator to check for. Supported in Java 1.6+ */
+	private static final String LINE_SEP = System.getProperty("line_separator", "\n");
+	/** Error message displayed when queue overflow occurs */
+    private static final String QUEUE_OVERFLOW = "\n\nLogentries Buffer Queue Overflow. Message Dropped!\n\n";
 	/*
 	 * Fields
 	 */
 
 	/** Destination Token. */
-	String token;
+	String token = "";
 	/** Debug flag. */
 	boolean debug;
 	/** Make local connection only. */
@@ -187,8 +191,8 @@ public class LogentriesAppender extends AppenderSkeleton {
 					// Take data from queue
 					String data = queue.take();
 
-					// Replace newlines with line separator character to format multi-line events nicely in Logentries UI
-					data = data.replace('\n', '\u2028');
+					// Replace platform-independent carriage return with unicode line separator character to format multi-line events nicely in Logentries UI
+					data = data.replace(LINE_SEP, '\u2028');
 					
 					// Add newline to end the event
 					data += '\n';
@@ -242,8 +246,16 @@ public class LogentriesAppender extends AppenderSkeleton {
 	 * Checks that key and location are set.
 	 */
 	boolean checkCredentials() {
-		if (token == null)
-			return false;
+		if (token.equals(CONFIG_TOKEN) || token.equals(""))
+		{
+			//Check if set in an environment variable
+			String envToken = System.getProperty(CONFIG_TOKEN);
+			
+			if(envToken == null)
+				return false;
+			
+			token = envToken;
+		}
 		
 		//Quick test to see if LOGENTRIES_TOKEN is a valid UUID
 		UUID u = UUID.fromString(token);
@@ -310,12 +322,11 @@ public class LogentriesAppender extends AppenderSkeleton {
 		String data = token + line;
 
 		// Try to append data to queue
-		boolean is_full = !queue.offer( data);
-
-		// If it's full, remove latest item and try again
-		if (is_full) {
+		if(!queue.offer( data))
+		{
 			queue.poll();
-			queue.offer( data);
+			if(!queue.offer( data))
+				dbg( QUEUE_OVERFLOW);
 		}
 	}
 
