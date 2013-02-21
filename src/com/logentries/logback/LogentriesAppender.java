@@ -402,10 +402,8 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
       StackTraceElement[] stack = event.getCallerData();
       int len = stack.length;
       for (int i = 0; i < len; i++) {
-        formattedEvent += "\tat " + stack[i].getClassName() + "." + stack[i].getMethodName()
+        formattedEvent += "\u2028\tat " + stack[i].getClassName() + "." + stack[i].getMethodName()
             + "(" + stack[i].getFileName() + ":" + stack[i].getLineNumber() + ")";
-        if (i < len - 1)
-          formattedEvent += "\u2028";
       }
     }
 
