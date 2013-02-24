@@ -18,7 +18,7 @@ import ch.qos.logback.core.net.SyslogConstants;
 /**
  * Logentries appender for logback.
  * 
- * VERSION: 1.1.7
+ * VERSION: 1.0
  * 
  * @author Viliam Holub
  * @author Mark Lacomber
@@ -31,7 +31,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
    */
 
   /** Current Version number of library/ */
-  static final String VERSION = "1.1.7";
+  static final String VERSION = "1.0";
   /** Size of the internal event queue. */
   private static final int QUEUE_SIZE = 32768;
   /** Logentries API server address. */
@@ -51,7 +51,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
   /** LE appender signature - used for debugging messages. */
   private static final String LE = "LE ";
   /** Error message displayed when invalid API key is detected. */
-  private static final String INVALID_TOKEN = "\n\nIt appears your LOGENTRIES_TOKEN parameter in log4j.xml is incorrect!\n\n";
+  private static final String INVALID_TOKEN = "\n\nIt appears your LOGENTRIES_TOKEN parameter in logback config file is incorrect!\n\n";
   /** Key Value for Token Environment Variable. */
   private static final String CONFIG_TOKEN = "LOGENTRIES_TOKEN";
   /** Platform dependent line separator to check for. Supported in Java 1.6+ */
@@ -119,14 +119,14 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
       final String api_addr = local ? LE_LOCAL_API : LE_API;
       final int port = local ? LE_LOCAL_PORT : LE_PORT;
 
-      dbg("Reopening connection to Logentries API server " + api_addr + ":" + port);
+      addInfo("Reopening connection to Logentries API server " + api_addr + ":" + port);
 
       // Open physical connection
       socket = new Socket(api_addr, port);
 
       stream = socket.getOutputStream();
 
-      dbg("Connection established");
+      addInfo("Connection established");
     }
 
     /**
@@ -149,7 +149,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
         } catch (IOException e) {
           // Get information if in debug mode
           if (debug) {
-            dbg("Unable to connect to Logentries");
+            addError("Unable to connect to Logentries");
             e.printStackTrace();
           }
         }
@@ -159,7 +159,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
         if (root_delay > MAX_DELAY)
           root_delay = MAX_DELAY;
         int wait_for = root_delay + random.nextInt(root_delay);
-        dbg("Waiting for " + wait_for + "ms");
+        addInfo("Waiting for " + wait_for + "ms");
         Thread.sleep(wait_for);
       }
     }
@@ -227,7 +227,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
         }
       } catch (InterruptedException e) {
         // We got interrupted, stop
-        dbg("Asynchronous socket writer interrupted");
+        addError("Asynchronous socket writer interrupted");
       }
 
       closeConnection();
@@ -324,7 +324,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
    */
   public void setToken(String token) {
     this.token = token;
-    dbg("Setting token to " + token);
+    addInfo("Setting token to " + token);
   }
 
   /**
@@ -345,7 +345,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
    */
   public void setDebug(boolean debug) {
     this.debug = debug;
-    dbg("Setting debug to " + debug);
+    addInfo("Setting debug to " + debug);
   }
 
   /**
@@ -367,7 +367,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
    *          line to append
    */
   void appendLine(String line) {
-    dbg("Queueing " + line);
+    addInfo("Queueing " + line);
 
     // Prefix the data with Token
     String data = token + line;
@@ -389,7 +389,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
   protected void append(ILoggingEvent event) {
     // Check that we have all parameters set and socket appender running
     if (!started && checkCredentials()) {
-      dbg("Starting Logentries asynchronous socket appender");
+      addInfo("Starting Logentries asynchronous socket appender");
       appender.start();
       started = true;
     }
@@ -418,18 +418,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
   public void stop() {
     super.stop();
     appender.interrupt();
-    dbg("Closing Logentries asynchronous socket appender");
-  }
-
-  /**
-   * Prints the message given. Used for internal debugging.
-   * 
-   * @param msg
-   *          message to display
-   */
-  void dbg(String msg) {
-    if (debug)
-      System.err.println(LE + msg);
+    addInfo("Closing Logentries asynchronous socket appender");
   }
 
   public Layout<ILoggingEvent> buildLayout() {
