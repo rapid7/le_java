@@ -49,7 +49,7 @@ Then add it to the build path from within your project.
 Logentries log4j Plugin Setup
 -----------------------------
 
-The next file you need is logentriesappender-1.1.7.jar which is the plugin for log4j. You can get it <a href="https://github.com/logentries/le_java/raw/master/lib/LogentriesAppender-1.1.7.jar">here.</a>
+The next file you need is logentriesappender-1.1.7.jar which is the plugin for log4j. You can get it <a href="https://github.com/logentries/le_java/raw/master/lib/LogentriesAppender-1.1.7.jar">here</a> or from <a href="https://github.com/logentries/logentries-mvn-repo">the Logentries Maven Repository</a>.
 
 Place this in the `WEB-INF/lib` folder of your project and add it to the buildpath as done above with log4j jar.
 
