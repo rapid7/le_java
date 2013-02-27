@@ -3,8 +3,8 @@ Logging To Logentries from Java
 
 Logentries currently supports logging from Java using the following logging libraries:
 
-* [Log4J](#log4j-instructions)
-* [Logback](#logback-instructions)
+* [Log4J](https://github.com/logentries/le_java#log4j-log4j-instructions)
+* [Logback](https://github.com/logentries/le_java#logback-logback-instructions)
 
 --------------------------------------------------------------
 
@@ -16,7 +16,7 @@ logging. Select 'TOKEN TCP' as the source_type and click Register to create the 
 
 --------------------------------------------------------------
 
-## LOG4J {#log4j-instructions}
+LOG4J
 ========
 
 To configure log4j, you will need to perform the following:
@@ -122,8 +122,8 @@ Example:
 	log.warn("Warning Message");
 
 
-## LOGBACK {#logback-instructions}
-=======
+LOGBACK
+==========
 
 To configure logback, you will need to perform the following:
 
