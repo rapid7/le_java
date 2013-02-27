@@ -3,8 +3,8 @@ Logging To Logentries from Java
 
 Logentries currently supports logging from Java using the following logging libraries:
 
-* [Log4J](https://github.com/logentries/le_java#log4j-log4j-instructions)
-* [Logback](https://github.com/logentries/le_java#logback-logback-instructions)
+* [Log4J](https://github.com/logentries/le_java#log4j)
+* [Logback](https://github.com/logentries/le_java#logback)
 
 --------------------------------------------------------------
 
