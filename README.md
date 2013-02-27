@@ -27,24 +27,24 @@ Maven Users
 
 Place this in your pom.xml
 
-<repositories>
-    <repository>
-        <id>logentries-releases</id>
-        <url>https://github.com/logentries/logentries-mvn-repo/raw/master/releases</url>
-    </repository>
-</repositories>
-<dependencies>
-	<dependency>
-    	<groupId>log4j</groupId>
-    	<artifactId>log4j</artifactId>
-    	<version>1.2.17</version>
-	</dependency>
-    <dependency>
-        <groupId>com.logentries</groupId>
-        <artifactId>logentries-appender</artifactId>
-        <version>1.1.8</version>
-    </dependency>
-</dependencies>
+	<repositories>
+	    <repository>
+	        <id>logentries-releases</id>
+	        <url>https://github.com/logentries/logentries-mvn-repo/raw/master/releases</url>
+	    </repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+	    	<groupId>log4j</groupId>
+	    	<artifactId>log4j</artifactId>
+	    	<version>1.2.17</version>
+		</dependency>
+	    <dependency>
+	        <groupId>com.logentries</groupId>
+	        <artifactId>logentries-appender</artifactId>
+	        <version>1.1.8</version>
+	    </dependency>
+	</dependencies>
 
 Manual Install
 --------------
