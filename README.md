@@ -1,7 +1,10 @@
 Logging To Logentries from Java
 ==============================
 
-Logentries currently supports logging from Java using log4j or logback logging libraries
+Logentries currently supports logging from Java using the following logging libraries:
+
+* [Log4J](#log4j-instructions)
+* [Logback](#logback-instructions)
 
 --------------------------------------------------------------
 
@@ -13,7 +16,7 @@ logging. Select 'TOKEN TCP' as the source_type and click Register to create the 
 
 --------------------------------------------------------------
 
-LOG4J
+LOG4J {#log4j-instructions}
 =====
 
 To configure log4j, you will need to perform the following:
@@ -119,5 +122,35 @@ Example:
 	log.warn("Warning Message");
 
 
-Logback
+LOGBACK {#logback-instructions}
 =======
+
+To configure logback, you will need to perform the following:
+
+    * (1) Install Logback (if you are not already using it).
+    * (2) Install the Logentries Logback plugin.
+    * (3) Configure the Logentries Logback plugin.
+
+Maven Users
+-----------
+
+Place this in your pom.xml
+
+	<repositories>
+	    <repository>
+	        <id>logentries-releases</id>
+	        <url>https://github.com/logentries/logentries-mvn-repo/raw/master/releases</url>
+	    </repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+    		<groupId>ch.qos.logback</groupId>
+    		<artifactId>logback-classic</artifactId>
+    		<version>0.9.30</version>
+		</dependency>
+	    <dependency>
+	        <groupId>com.logentries</groupId>
+	        <artifactId>logentries-appender</artifactId>
+	        <version>1.1.8</version>
+	    </dependency>
+	</dependencies>
