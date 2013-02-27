@@ -1,109 +1,109 @@
-Logging To Logentries from Java
-==============================
+# Welcome to your beanstalk-maven-plugin archetype project!
 
-Logentries currently supports log4j logging from Java as well as PaaS, such as CloudBees
+## About
 
---------------------------------------------------------------
+This project was generated from the elasticbeanstalk-service-webapp-archetype. 
 
-Simple Usage Example
---------------------
+As it is, it is a boilerplate code for a generic, modern webapp using Amazon Web Services' Elastic Beanstalk Service.
 
-	public class HelloLoggingWorld {
-	
-		private static Logger log = LogManager.getRootLogger();
-		
-		public static void main(String[] args) throws IOException
-		{
-			log.warn("Warning log sent from java class");
-		}
-	}
+It also includes some tips and tricks we've learned over the past years when using Elastic Beanstalk. They include:
 
+  - Custom Fixtures for Embedded in-Container Testing (see ServerRule class)
+  - Another one for [Guice](http://code.google.com/p/google-guice/)-based startup (ContainerRule)
+  - Uses [rest-assured](http://code.google.com/p/rest-assured/) for fluent JAX-RS testing
+  - ```logback.xml``` (and ```logback-test.xml```) files, including Syslog usage for [PaperTrail](https://papertrailapp.com/?thank=cffa7e)
+  - One single [Guice](http://code.google.com/p/google-guice/) module for each and every AWS-supported Java Client (BaseAWSModule)
+  - Support for dealing with the configuration parameters for Beanstalk (BeanstalkCredentialsProviderChain)
+  - [Jackson](http://wiki.fasterxml.com/JacksonHome), [Jersey](http://jersey.java.net/), and [Guice](http://code.google.com/p/google-guice/) configured out of the box (although you're likely to run into problems if you ever need viewables)
+  - Basic JAX-RS Boilerplate Code
+  - A [Simple Notification Service (SNS)](http://aws.amazon.com/sns/) Notification JAX-RS Resource on ```BaseSNSResource``` and ```SNSResource``` (useful if you need to plug-in notifications)
+  - A Basic Health Code Check (handy!)
 
---------------------------------------------------------------
+In fact, this archetype was derived from an internal ingenieux project - a backend for [ekaterminal](http://www.ingenieux.com.br/products/ekaterminal/), 
+which is another piece of software we are fairly confident you'll love it if you do elastic beanstalk/mapreduce too often.
 
-To configure log4j, you will need to perform the following:
+We hope you like it. If you run into any problems, please let us know by the [mailing list](http://groups.google.com/group/beanstalker-users) or the [issue tracker](http://github.com/ingenieux/beanstalker/issues) 
 
-    * (1) Setup your Logentries account.
-    * (2) Setup Log4j (if you are not already using it).
-    * (3) Configure the Logentries Log4j plugin.
+## Setting up your Maven Build
 
-Account Setup
--------------
-You can sign up for a Logentries account simply by clicking Sign Up and entering your email address. Once you have your credentials and have logged in,
-create a new host in the UI with a name that represents your app. Then, select this host and create a new logfile with a name that represents what you're
-logging. Select 'TOKEN TCP' as the source_type and click Register to create the log.
+Create / Edit your settings.xml as suggested in the [Security Page](http://beanstalker.ingenieux.com.br/beanstalk-maven-plugin/security.html) 
 
-log4j Setup
------------
+This project, as is, supports modes 1-2 (settings.xml), and it looks by default for aws.amazon.com. 
 
-If you don't already have log4j set up in your project, please follow these steps:
+*Don't worry, you're likely to do it once for each and every machine you plan to build. :)*
 
-Download log4j from:
+## Configuring your Project
 
-https://logging.apache.org/log4j/1.2/download.html
+We suggest convention over configuration, but anyway. The only setting you're likely to set is your ```cnamePrefix``` value in your pom.xml file. 
 
-Retrieve log4j jar file and place it the `WEB-INF/lib` folder of your project.
+Make sure you pick something unique and unlikely to conflict with other users.
 
-Then add it to the build path from within your project.
+## Deploying
 
-Logentries log4j Plugin Setup
------------------------------
+Simply call ```mvn deploy -Pdeploy```
 
-The next file you need is logentriesappender-1.1.7.jar which is the plugin for log4j. You can get it <a href="https://github.com/logentries/le_java/raw/master/lib/LogentriesAppender-1.1.7.jar">here.</a>
+If your environment is Ready (Green or Red), it will deploy. If not, a new version will get published. 
 
-Place this in the `WEB-INF/lib` folder of your project and add it to the buildpath as done above with log4j jar.
+*You can always launch a new environment...*
 
-The second file required is called log4j.xml and is available again on github on projects pages.
+## Launching an Environment
 
-Add this file to your project as it is the config which adds the plugin for log4j to send logs to Logentries. This file should be in added to the classpath.
+If you did the previous step, it will create a new elastic beanstalk application for you in AWS Console. 
 
-In this file, you will see the following:
+From the console, click in "Launch New Environment". In this dialog, not all options are available, so initially set the ```Health Check URL``` to the /debug handler:
 
-	<?xml version="1.0" encoding="UTF-8"?>
-	<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-	<log4j:configuration debug="true">
-	<appender name="le" class="com.logentries.log4j.LogentriesAppender">
-		<!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
-		<param name="Token" value="LOGENTRIES_TOKEN" />
-		<param name="Debug" value="false" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern"
-				value="%d{yyyy-MM-dd HH:mm:ss ZZZ} %-5p (%F:%L)  %m" />
-		</layout>
-	</appender>
-	<logger name="example">
-		<level value="debug" />
-	</logger>
-	<root>
-		<priority value="debug"></priority>
-		<appender-ref ref="le" />
-	</root>
-	</log4j:configuration>
+```/services/api/v1/debug```
 
-Replace the value "LOGENTRIES_TOKEN" with the token UUID that appears beside your newly created logfile in grey.
-    
-For debugging purposes set the debug parameter to true. The appender will display debug information on console.
+Don't launch it yet, though. We have some tips...
 
+## Environment / Configuration Tips:
 
-Logging Messages
-----------------
+  - We suggest you save your environment into a configuration template once you're happy. We suggest ```envname-yyyymmdd-nn```, where NN is a number which gets incremented.
+  - Also, AWS told us its a bad idea to have matching environment names / applications, and even have the same environment named across different regions. In fact, they suggest you to add the ```-env``` suffix to make it easier to spot environments, environmentIds, and other oddly-named things. 
 
-With that done, you are ready to send logs to Logentries.
+## Setting the Proper Health Check URL
 
-In each class you wish to log from, enter the following using directives at the top if not already there:
+Besides that, make sure you can map to an SSH Key you already have, so you are able to log into your EC2 Instance and troubleshoot any problems (unlikely, but better safe than sorry).
 
-	import org.apache.log4j.Logger;
-	import org.apache.log4j.LogManager;
+Ok, now you can launch.
 
-Then create this object at class-level:
+Once the application is launched (and there's a Green Icon), click in "Edit Configuration" and set your applications AWS Access Key / Shared Key, then you can set set the proper Health Check URL:
 
-	private static Logger log = LogManager.getRootLogger();
+```/services/api/v1/health/check```
 
-Now within your code in that class, you can log using log4j as normal and it will log to Logentries.
+## SCM Notes
 
-Example:
+### Git Fast-Deploy
 
-	log.debug("Debugging Message");
-	log.info("Informational message");
-	log.warn("Warning Message");
+Please never commit the contents of your ```tmp-git-staging``` directory. 
 
+Its there to cache locally and enable fast deployments into elastic beanstalk via the git backend.
+
+(if you look closely, thats the reason for both .gitignore and .hgignore files)
+
+# Code Notes
+
+## Testing
+
+The project includes a lot of boilerplate code useful for AWS. We tried to achieve a mix (e.g., avoiding adding too much dependencies), and if you want, you're free to get rid of it.
+
+## Health Check
+
+The health check code tries to poll DynamoDB, S3, and EC2. If your EC2 keys are IAM-limited, comment-out the relevant sections.
+
+## JAX-RS
+
+This project has a few particular details. If you want to rename your root resource path, look under ```WebModule``` instead of ```web.xml```.
+
+## Misc Notes
+
+ - Check [the plugin page](http://beanstalker.ingenieux.com.br/beanstalk-maven-plugin/) for General Reference and Usage Instructions.
+ - Subscribe to the beanstalker-users list at [[http://groups.google.com/group/beanstalker-users]] to get up-to-date information
+ - Problems? Let us know, on the lists or [the issue tracker](http://github.com/ingenieux/beanstalker/issues)
+ - Feedback please!
+
+We hope beanstalk-maven-plugin helps your life easier, and find it fun and easy as much as we do.
+
+btw, why not [donate to beanstalker](http://beanstalker.ingenieux.com.br/donate.html)?
+
+Thank you.

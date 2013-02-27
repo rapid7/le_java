@@ -5,6 +5,7 @@
 		<!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
 		<param name="Token" value="LOGENTRIES_TOKEN" />
 		<param name="Debug" value="false" />
+		<param name="Ssl" value="false" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{yyyy-MM-dd HH:mm:ss ZZZ} %-5p (%F:%L)  %m" />
