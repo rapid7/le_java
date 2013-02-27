@@ -16,8 +16,8 @@ logging. Select 'TOKEN TCP' as the source_type and click Register to create the 
 
 --------------------------------------------------------------
 
-LOG4J {#log4j-instructions}
-=====
+## LOG4J {#log4j-instructions}
+========
 
 To configure log4j, you will need to perform the following:
 
@@ -122,7 +122,7 @@ Example:
 	log.warn("Warning Message");
 
 
-LOGBACK {#logback-instructions}
+## LOGBACK {#logback-instructions}
 =======
 
 To configure logback, you will need to perform the following:
