@@ -291,14 +291,11 @@ public class AsyncLogger {
 		
 		dbg( "Queueing " + line);
 
-		// Prefix the data with Token
-		String data = token + line;
-
 		// Try to append data to queue
-		if(!queue.offer( data))
+		if(!queue.offer( line))
 		{
 			queue.poll();
-			if(!queue.offer( data))
+			if(!queue.offer( line))
 				dbg( QUEUE_OVERFLOW);
 		}
 	}
