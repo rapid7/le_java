@@ -45,7 +45,7 @@ Place this in your pom.xml
 	    <dependency>
 	        <groupId>com.logentries</groupId>
 	        <artifactId>logentries-appender</artifactId>
-	        <version>1.1.8</version>
+	        <version>1.1.9</version>
 	    </dependency>
 	</dependencies>
 
@@ -151,6 +151,60 @@ Place this in your pom.xml
 	    <dependency>
 	        <groupId>com.logentries</groupId>
 	        <artifactId>logentries-appender</artifactId>
-	        <version>1.1.8</version>
+	        <version>1.1.9</version>
 	    </dependency>
 	</dependencies>
+
+Configure the logback plugin
+----------------------------
+
+Download the required logback-logentriesAppender.xml config file from <a href="https://github.com/logentries/le_java/raw/master/logentries-appender/configFiles/logback-logentriesAppender.xml">here</a>
+
+Add this file to your project as it is the config which adds the plugin for logback to send logs to Logentries. This file should be in added to the classpath.
+
+In this file, you will see the following:
+
+	<?xml version="1.0" encoding="UTF-8" ?>
+	<configuration>
+
+  		<appender name="LE"
+    		class="com.logentries.logback.LogentriesAppender">
+			<Debug>False</Debug>
+    		<Token>YOUR_TOKEN_HERE</Token>
+    		<Ssl>False</Ssl>
+    		<facility>USER</facility>
+    		<encoder>
+      			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    		</encoder>
+  		</appender>
+
+  		<root level="debug">
+    		<appender-ref ref="LE" />
+  		</root>
+	</configuration>
+
+Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.
+    
+For debugging purposes set the debug parameter to true.
+
+Logging Messages
+----------------
+
+With that done, you are ready to send logs to Logentries.
+
+In each class you wish to log from, enter the following using directives at the top if not already there:
+
+	import org.slf4j.Logger;
+	import org.slf4j.LoggerFactory;
+
+Then create this object at class-level:
+
+	private static Logger log = LoggerFactory.getLogger("logentries");
+
+Now within your code in that class, you can log using logback as normal and it will log to Logentries.
+
+Example:
+
+	log.debug("Debugging Message");
+	log.info("Informational message");
+	log.warn("Warning Message");
