@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+  <appender name="LE"
+    class="com.logentries.logback.LogentriesAppender">
+	<Debug>False</Debug>
+    <Token>YOUR_TOKEN_HERE</Token>
+    <Ssl>False</Ssl>
+    <facility>USER</facility>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="debug">
+    <appender-ref ref="LE" />
+  </root>
+</configuration>
