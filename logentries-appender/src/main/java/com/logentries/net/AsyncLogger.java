@@ -13,7 +13,7 @@ import com.logentries.net.LogentriesClient;
 /**
  * Logentries Asynchronous Logger for integration with Java logging frameworks.
  * 
- * VERSION: 1.1.8
+ * VERSION: 1.1.9
  * 
  * @author Viliam Holub
  * @author Mark Lacomber
@@ -27,7 +27,7 @@ public class AsyncLogger {
 	 */
 
 	/** Current Version number of library/ */
-	static final String VERSION = "1.1.8";
+	static final String VERSION = "1.1.9";
 	/** Size of the internal event queue. */
 	private static final int QUEUE_SIZE = 32768;
 	/** UTF-8 output character set. */
