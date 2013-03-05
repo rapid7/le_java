@@ -12,7 +12,7 @@
 	<artifactId>logentries-appender</artifactId>
 	<packaging>jar</packaging>
 	<name>Logentries Appender</name>
-	<version>1.1.11</version>
+	<version>1.1.12-SNAPSHOT</version>
 	<description>Contains logback and log4j appenders that will send log data to Logentries</description>
 	<url>https://github.com/logentries/le_java</url>
 	<licenses>
