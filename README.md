@@ -39,7 +39,7 @@ Place this in your pom.xml
 	    <dependency>
 	        <groupId>com.logentries</groupId>
 	        <artifactId>logentries-appender</artifactId>
-	        <version>1.1.9</version>
+	        <version>1.1.11</version>
 	    </dependency>
 	</dependencies>
 
@@ -54,7 +54,7 @@ Retrieve log4j jar file and place it the `WEB-INF/lib` folder of your project.
 
 Then add it to the build path from within your project.
 
-The next file you need is logentriesappender-1.1.9.jar which is the plugin for log4j. You can get it <a href="https://github.com/logentries/logentries-mvn-repo/raw/master/releases/com/logentries/logentries-appender/1.1.9/logentries-appender-1.1.9.jar">here.</a>
+The next file you need is logentriesappender-1.1.11.jar which is the plugin for log4j. You can get it <a href="http://search.maven.org/remotecontent?filepath=com/logentries/logentries-appender/1.1.11/logentries-appender-1.1.11.jar">here.</a>
 
 Place this in the `WEB-INF/lib` folder of your project and add it to the buildpath as done above with log4j jar.
 
@@ -130,12 +130,6 @@ Maven Users
 
 Place this in your pom.xml
 
-	<repositories>
-	    <repository>
-	        <id>logentries-releases</id>
-	        <url>https://github.com/logentries/logentries-mvn-repo/raw/master/releases</url>
-	    </repository>
-	</repositories>
 	<dependencies>
 		<dependency>
     		<groupId>ch.qos.logback</groupId>
@@ -145,7 +139,7 @@ Place this in your pom.xml
 	    <dependency>
 	        <groupId>com.logentries</groupId>
 	        <artifactId>logentries-appender</artifactId>
-	        <version>1.1.9</version>
+	        <version>1.1.11</version>
 	    </dependency>
 	</dependencies>
 
