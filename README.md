@@ -30,12 +30,6 @@ Maven Users
 
 Place this in your pom.xml
 
-	<repositories>
-	    <repository>
-	        <id>logentries-releases</id>
-	        <url>https://github.com/logentries/logentries-mvn-repo/raw/master/releases</url>
-	    </repository>
-	</repositories>
 	<dependencies>
 		<dependency>
 	    	<groupId>log4j</groupId>
