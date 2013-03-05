@@ -158,7 +158,7 @@ In this file, you will see the following:
   		<appender name="LE"
     		class="com.logentries.logback.LogentriesAppender">
 			<Debug>False</Debug>
-    		<Token>YOUR_TOKEN_HERE</Token>
+    		<Token>LOGENTRIES_TOKEN</Token>
     		<Ssl>False</Ssl>
     		<facility>USER</facility>
     		<encoder>
