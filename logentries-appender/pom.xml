@@ -24,8 +24,8 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:git:https://github.com/logentries/le_java.git</connection>
-		<developerConnection>scm:git:https://github.com/logentries/le_java.git</developerConnection>
+		<connection>scm:git:git@github.com:logentries/le_java.git</connection>
+		<developerConnection>scm:git:git@github.com:logentries/le_java.git</developerConnection>
 		<url>https://github.com/logentries/le_java</url>
 	</scm>
 	<developers>
