@@ -135,6 +135,13 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 		}
 		this.facilityStr = facilityStr;
 	}
+	
+	/**
+	 *  Sets the layout for the Appender
+	 */
+	public void setLayout(Layout<ILoggingEvent> layout) {
+		this.layout = layout;
+	}
 
 	/**
 	 * Implements AppenderSkeleton Append method, handles time and format

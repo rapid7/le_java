@@ -161,9 +161,9 @@ In this file, you will see the following:
     		<Token>LOGENTRIES_TOKEN</Token>
     		<Ssl>False</Ssl>
     		<facility>USER</facility>
-    		<encoder>
+    		<layout>
       			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    		</encoder>
+    		</layout>
   		</appender>
 
   		<root level="debug">
