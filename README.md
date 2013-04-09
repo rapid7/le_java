@@ -139,7 +139,7 @@ Place this in your pom.xml
 	    <dependency>
 	        <groupId>com.logentries</groupId>
 	        <artifactId>logentries-appender</artifactId>
-	        <version>1.1.11</version>
+	        <version>1.1.12</version>
 	    </dependency>
 	</dependencies>
 
