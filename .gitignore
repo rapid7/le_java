@@ -1,1 +1,6 @@
-logentries-appender/target/
+target
+.directory
+.project
+.settings
+.classpath
+
