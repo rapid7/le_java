@@ -99,6 +99,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 		this.le_async.setDebug(debug);
 	}
 
+	@Override
 	public void start() {
 		if (layout == null) {
 			layout = buildLayout();
@@ -141,6 +142,10 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	 */
 	public void setLayout(Layout<ILoggingEvent> layout) {
 		this.layout = layout;
+	}
+	
+	public Layout<ILoggingEvent> getLayout() {
+		return layout;
 	}
 
 	/**
