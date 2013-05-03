@@ -54,7 +54,7 @@ Retrieve log4j jar file and place it the `WEB-INF/lib` folder of your project.
 
 Then add it to the build path from within your project.
 
-The next file you need is logentriesappender-1.1.11.jar which is the plugin for log4j. You can get it <a href="http://search.maven.org/remotecontent?filepath=com/logentries/logentries-appender/1.1.11/logentries-appender-1.1.11.jar">here.</a>
+The next file you need is logentriesappender-1.1.13.jar which is the plugin for log4j. You can get it <a href="http://search.maven.org/remotecontent?filepath=com/logentries/logentries-appender/1.1.13/logentries-appender-1.1.13.jar">here.</a>
 
 Place this in the `WEB-INF/lib` folder of your project and add it to the buildpath as done above with log4j jar.
 
