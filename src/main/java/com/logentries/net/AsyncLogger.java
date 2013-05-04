@@ -232,7 +232,7 @@ public class AsyncLogger {
 	
 	String getEnvVar( String key)
 	{
-		String envVal = System.getProperty(key);
+		String envVal = System.getenv(key);
 		
 		return envVal != null ? envVal : "";
 	}
