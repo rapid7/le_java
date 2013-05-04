@@ -244,10 +244,7 @@ public class AsyncLogger {
 		
 		
 		if(!httpPut)
-		{
-			if(checkValidUUID(this.getToken()))
-				return true;
-			
+		{	
 			if (token.equals(CONFIG_TOKEN) || token.equals(""))
 			{
 				//Check if set in an environment variable, used with PaaS providers
@@ -259,9 +256,9 @@ public class AsyncLogger {
 				}
 				
 				this.setToken(envToken);
-				
-				return true;
 			}
+			
+			return checkValidUUID(this.getToken());
 		}else{
 			if ( !checkValidUUID(this.getKey()) || this.getLocation() == "")
 				return false;
