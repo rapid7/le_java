@@ -265,8 +265,6 @@ public class AsyncLogger {
 			
 			return true;
 		}
-		
-		return false;
 	}
 
 	/**
