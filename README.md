@@ -61,7 +61,7 @@ Place this in the `WEB-INF/lib` folder of your project and add it to the buildpa
 Configure the Log4J plugin
 -------------------------- 
 
-Download the required log4j.xml config file from <a href="https://github.com/logentries/le_java/raw/master/logentries-appender/configFiles/log4j.xml">here</a>
+Download the required log4j.xml config file from <a href="https://github.com/logentries/le_java/raw/master/configFiles/log4j.xml">here</a>
 
 Add this file to your project as it is the config which adds the plugin for log4j to send logs to Logentries. This file should be in added to the classpath.
 
