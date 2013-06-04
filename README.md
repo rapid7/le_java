@@ -39,7 +39,7 @@ Place this in your pom.xml
 	    <dependency>
 	        <groupId>com.logentries</groupId>
 	        <artifactId>logentries-appender</artifactId>
-	        <version>1.1.13</version>
+	        <version>RELEASE</version>
 	    </dependency>
 	</dependencies>
 
@@ -54,7 +54,7 @@ Retrieve log4j jar file and place it the `WEB-INF/lib` folder of your project.
 
 Then add it to the build path from within your project.
 
-The next file you need is logentriesappender-1.1.13.jar which is the plugin for log4j. You can get it <a href="http://search.maven.org/remotecontent?filepath=com/logentries/logentries-appender/1.1.13/logentries-appender-1.1.13.jar">here.</a>
+The next file you need is logentriesappender-1.1.15.jar which is the plugin for log4j. You can get it <a href="http://search.maven.org/remotecontent?filepath=com/logentries/logentries-appender/1.1.15/logentries-appender-1.1.15.jar">here.</a>
 
 Place this in the `WEB-INF/lib` folder of your project and add it to the buildpath as done above with log4j jar.
 
@@ -139,14 +139,14 @@ Place this in your pom.xml
 	    <dependency>
 	        <groupId>com.logentries</groupId>
 	        <artifactId>logentries-appender</artifactId>
-	        <version>1.1.13</version>
+	        <version>RELEASE</version>
 	    </dependency>
 	</dependencies>
 
 Configure the logback plugin
 ----------------------------
 
-Download the required logback-logentriesAppender.xml config file from <a href="https://github.com/logentries/le_java/raw/master/logentries-appender/configFiles/logback-logentriesAppender.xml">here</a>
+Download the required logback-logentriesAppender.xml config file from <a href="https://github.com/logentries/le_java/raw/master/configFiles/log4j.xml">here</a>
 
 Add this file to your project as it is the config which adds the plugin for logback to send logs to Logentries. This file should be in added to the classpath.
 
