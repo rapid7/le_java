@@ -22,7 +22,7 @@ public class LogentriesClient
 	 */
 	
 	/** Logentries API server address. */
-	private static final String LE_API = "api.logentries.com";
+	private static final String LE_API = "data.logentries.com";
 	/** Port number for HTTP PUT logging on Logentries API server. */
 	private static final int LE_HTTP_PORT = 80;
 	/** Port number for SSL HTTP PUT logging on Logentries API server. */
