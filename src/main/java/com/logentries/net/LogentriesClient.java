@@ -21,8 +21,10 @@ public class LogentriesClient
 	 * Constants
 	 */
 	
-	/** Logentries API server address. */
-	private static final String LE_API = "data.logentries.com";
+	/** Logentries API server address for Token-based input. */
+	private static final String LE_TOKEN_API = "data.logentries.com";
+	/** Logentries API server address for HTTP PUT input. */
+	private static final String LE_HTTP_API = "api.logentries.com";
 	/** Port number for HTTP PUT logging on Logentries API server. */
 	private static final int LE_HTTP_PORT = 80;
 	/** Port number for SSL HTTP PUT logging on Logentries API server. */
@@ -44,6 +46,19 @@ public class LogentriesClient
 		ssl_choice = ssl;
 		http_choice = httpPut;
 	}
+
+	public int getPort()
+	{
+		if (ssl_choice)
+			return http_choice ? LE_HTTP_SSL_PORT: LE_TOKEN_TLS_PORT;
+		else
+			return http_choice ? LE_HTTP_PORT : LE_TOKEN_PORT;
+	}
+
+	public String getAddress()
+	{
+		return http_choice ? LE_HTTP_API, LE_TOKEN_API;
+	}
 	
 	public void connect() throws UnknownHostException, IOException
 	{
@@ -51,16 +66,15 @@ public class LogentriesClient
 		if(ssl_choice) {
 			if(http_choice)
 			{
-				SSLSocket s = (SSLSocket) ssl_factory.createSocket( LE_API, LE_HTTP_SSL_PORT);
+				SSLSocket s = (SSLSocket) ssl_factory.createSocket( getAddress(), getPort() );
 				s.setTcpNoDelay( true);
 				s.startHandshake();
 				socket = s;
 			}else{
-				socket = SSLSocketFactory.getDefault().createSocket( LE_API, LE_TOKEN_TLS_PORT);
+				socket = SSLSocketFactory.getDefault().createSocket( getAddress(), getPort() );
 			}
 		}else{
-			int port = http_choice ? LE_HTTP_PORT : LE_TOKEN_PORT;
-			socket = new Socket( LE_API, port);
+			socket = new Socket( getAddress(), getPort() );
 		}
 		
 		this.stream = socket.getOutputStream();
