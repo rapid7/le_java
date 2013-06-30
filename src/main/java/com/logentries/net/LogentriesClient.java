@@ -57,7 +57,7 @@ public class LogentriesClient
 
 	public String getAddress()
 	{
-		return http_choice ? LE_HTTP_API, LE_TOKEN_API;
+		return http_choice ? LE_HTTP_API : LE_TOKEN_API;
 	}
 	
 	public void connect() throws UnknownHostException, IOException
