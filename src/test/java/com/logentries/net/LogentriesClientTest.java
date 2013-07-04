@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 public class LogentriesClientTest {
 
 	private static final String API_HTTP_SERVER = "api.logentries.com";
-	private static final String API_TOKEN_SERVER = "data.logentries.com";
+	private static final String API_TOKEN_SERVER = "api.logentries.com";
 	private static final int HTTP_SSL_PORT = 443;
 	private static final int HTTP_PORT = 80;
 	private static final int TOKEN_PORT = 10000;
