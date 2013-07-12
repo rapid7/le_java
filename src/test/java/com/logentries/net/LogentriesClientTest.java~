@@ -21,7 +21,7 @@ public class LogentriesClientTest {
 
 		// HttpPut = false, SSL = false
 		LogentriesClient client2 = new LogentriesClient(false,false);
-		assertEquals("api.logentries.com should be used for Token TCP", client2.getAddress(), API_TOKEN_SERVER);
+		assertEquals("data.logentries.com should be used for Token TCP", client2.getAddress(), API_TOKEN_SERVER);
 	}
 
 	@Test
