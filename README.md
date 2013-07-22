@@ -131,7 +131,12 @@ Maven Users
 Place this in your pom.xml
 
 	<dependencies>
-		<dependency>
+	    <dependency>
+	        <groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>1.7.5</version>
+	    </dependency>
+	    <dependency>
     		<groupId>ch.qos.logback</groupId>
     		<artifactId>logback-classic</artifactId>
     		<version>0.9.30</version>
