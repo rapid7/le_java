@@ -82,6 +82,9 @@ public class LogentriesClient
 	
 	public void write(byte[] buffer, int offset, int length) throws IOException
 	{
+		if(this.stream == null){
+			throw new IOException();
+		}
 		this.stream.write(buffer, offset, length);
 		this.stream.flush();
 	}
