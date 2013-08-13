@@ -155,21 +155,8 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	 */
 	@Override
 	protected void append(ILoggingEvent event) {
-		
 		// Render the event according to layout
 		String formattedEvent = layout.doLayout(event);
-
-		// Append stack trace if present
-		if (event.getThrowableProxy() != null) {
-			StackTraceElement[] stack = event.getCallerData();
-			int len = stack.length;
-			for (int i = 0; i < len; i++) {
-				formattedEvent += "\u2028\tat " + stack[i].getClassName() + "." + stack[i].getMethodName()
-						+ "(" + stack[i].getFileName() + ":" + stack[i].getLineNumber() + ")";
-			}
-		}
-
-		// Prepare to be queued
 		this.le_async.addLineToQueue(formattedEvent);
 	}
 
