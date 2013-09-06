@@ -3,6 +3,8 @@ package com.logentries.logback;
 import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.pattern.SyslogStartConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.IThrowableProxy;
+import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.net.SyslogConstants;
@@ -16,7 +18,7 @@ import com.logentries.net.AsyncLogger;
 * @author Ben McCann
 */
 public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
-	
+
 	/*
 	 * Fields
 	 */
@@ -34,65 +36,65 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	/**
 	 * Initializes asynchronous logging.
 	 */
-	public LogentriesAppender() 
+	public LogentriesAppender()
 	{
 		le_async = new AsyncLogger();
 	}
-	
+
 	/*
 	 * Public methods to send logback parameters to AsyncLogger
 	 */
 	/**
 	 * Sets the token
-	 * 
+	 *
 	 * @param token
 	 */
 	public void setToken( String token) {
 		this.le_async.setToken(token);
 	}
-	
+
 	/**
 	 *  Sets the HTTP PUT boolean flag. Send logs via HTTP PUT instead of default Token TCP
-	 *  
+	 *
 	 *  @param httpput HttpPut flag to set
 	 */
 	public void setHttpPut( boolean HttpPut) {
 		this.le_async.setHttpPut(HttpPut);
 	}
-	
-	/** Sets the ACCOUNT KEY value for HTTP PUT 
-	 * 
+
+	/** Sets the ACCOUNT KEY value for HTTP PUT
+	 *
 	 * @param account_key
 	 */
 	public void setKey( String account_key)
 	{
 		this.le_async.setKey(account_key);
 	}
-	
+
 	/**
 	 * Sets the LOCATION value for HTTP PUT
-	 * 
+	 *
 	 * @param log_location
 	 */
 	public void setLocation( String log_location)
 	{
 		this.le_async.setLocation(log_location);
 	}
-	
+
 	/**
 	 * Sets the SSL boolean flag
-	 * 
+	 *
 	 * @param ssl
 	 */
 	public void setSsl( boolean ssl)
 	{
 		this.le_async.setSsl(ssl);
 	}
-	
+
 	/**
 	 * Sets the debug flag. Appender in debug mode will print error messages on
 	 * error console.
-	 * 
+	 *
 	 * @param debug debug flag to set
 	 */
 	public void setDebug( boolean debug) {
@@ -136,14 +138,14 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 		}
 		this.facilityStr = facilityStr;
 	}
-	
+
 	/**
 	 *  Sets the layout for the Appender
 	 */
 	public void setLayout(Layout<ILoggingEvent> layout) {
 		this.layout = layout;
 	}
-	
+
 	public Layout<ILoggingEvent> getLayout() {
 		return layout;
 	}
@@ -155,17 +157,19 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	 */
 	@Override
 	protected void append(ILoggingEvent event) {
-		
+
 		// Render the event according to layout
 		String formattedEvent = layout.doLayout(event);
 
 		// Append stack trace if present
-		if (event.getThrowableProxy() != null) {
-			StackTraceElement[] stack = event.getCallerData();
-			int len = stack.length;
-			for (int i = 0; i < len; i++) {
-				formattedEvent += "\u2028\tat " + stack[i].getClassName() + "." + stack[i].getMethodName()
-						+ "(" + stack[i].getFileName() + ":" + stack[i].getLineNumber() + ")";
+		IThrowableProxy error = event.getThrowableProxy();
+		if (error != null) {
+			StackTraceElementProxy[] trace = error.getStackTraceElementProxyArray();
+
+			for (int i = 0; i < trace.length; i++) {
+				StackTraceElement element = trace[i].getStackTraceElement();
+				formattedEvent += "\u2028\tat " + element.getClassName() + "." + element.getMethodName()
+						+ "(" + element.getFileName() + ":" + element.getLineNumber() + ")";
 			}
 		}
 
@@ -183,15 +187,15 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	}
 
 	public Layout<ILoggingEvent> buildLayout() {
-		PatternLayout layout = new PatternLayout();
-		layout.getInstanceConverterMap().put("syslogStart", SyslogStartConverter.class.getName());
+		PatternLayout l = new PatternLayout();
+		l.getInstanceConverterMap().put("syslogStart", SyslogStartConverter.class.getName());
 		if (suffixPattern == null) {
 			suffixPattern = DEFAULT_SUFFIX_PATTERN;
 		}
-		layout.setPattern(getPrefixPattern() + suffixPattern);
-		layout.setContext(getContext());
-		layout.start();
-		return layout;
+		l.setPattern(getPrefixPattern() + suffixPattern);
+		l.setContext(getContext());
+		l.start();
+		return l;
 	}
 
 	/**
