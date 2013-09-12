@@ -18,13 +18,9 @@ import ch.qos.logback.classic.spi.StackTraceElementProxy;
  */
 public class ExceptionFormatter {
 
-	/**
-	 * Logentries newline delimiter.
-	 */
+	/** Logentries newline delimiter. */
 	public static final String DELIMITER = "\u2028";
-	/*
-	 * Tab character used for trace indentation.
-	 */
+	/** Tab character used for trace indentation. */
 	public static final String TAB = "\t";
 
 	/**
@@ -42,8 +38,8 @@ public class ExceptionFormatter {
 		String ex = "";
 		ex += formatTopLevelError(error);
 		ex += formatStackTraceElements(error.getStackTraceElementProxyArray());
-		ex += DELIMITER;
 		IThrowableProxy cause = error.getCause();
+        ex += DELIMITER;
 		while (cause != null) {
 			ex += formatTopLevelError(cause);
 			StackTraceElementProxy[] arr = cause.getStackTraceElementProxyArray();
@@ -56,9 +52,11 @@ public class ExceptionFormatter {
 
 	private static String formatStackTraceElements(StackTraceElementProxy[] elements) {
 		String s = "";
-		for (StackTraceElementProxy e : elements) {
-			s += DELIMITER + TAB + e.getSTEAsString();
-		}
+        if (elements != null) {
+            for (StackTraceElementProxy e : elements) {
+                s += DELIMITER + TAB + e.getSTEAsString();
+            }
+        }
 		return s;
 	}
 
