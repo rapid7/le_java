@@ -6,6 +6,6 @@ public class ExceptionFormatterTest {
 
 	@Test
 	public void testSomething() {
-		
+
 	}
 }

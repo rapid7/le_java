@@ -4,7 +4,6 @@ import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.pattern.SyslogStartConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
-import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.net.SyslogConstants;
@@ -12,32 +11,36 @@ import ch.qos.logback.core.net.SyslogConstants;
 import com.logentries.net.AsyncLogger;
 
 /**
-* Logentries appender for logback.
-*
-* @author Mark Lacomber
-* @author Ben McCann
-*/
+ * Logentries appender for logback.
+ *
+ * @author Mark Lacomber
+ * @author Ben McCann
+ * @author Chris Mowforth
+ */
 public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 
-	/*
-	 * Fields
+	/**
+	 * Asynchronous Background logger
 	 */
-	/** Asynchronous Background logger */
-	AsyncLogger le_async;
-	/** Layout */
-	Layout<ILoggingEvent> layout;
-	/** Facility String */
-	String facilityStr;
-	/** Default Suffix Pattern */
+	private final AsyncLogger le_async;
+	/**
+	 * Layout
+	 */
+	private Layout<ILoggingEvent> layout;
+	/**
+	 * Facility String
+	 */
+	private String facilityStr;
+	/**
+	 * Default Suffix Pattern
+	 */
 	static final public String DEFAULT_SUFFIX_PATTERN = "[%thread] %logger %msg";
-
-	protected String suffixPattern;
+	private String suffixPattern;
 
 	/**
 	 * Initializes asynchronous logging.
 	 */
-	public LogentriesAppender()
-	{
+	public LogentriesAppender() {
 		le_async = new AsyncLogger();
 	}
 
@@ -49,25 +52,26 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	 *
 	 * @param token
 	 */
-	public void setToken( String token) {
+	public void setToken(String token) {
 		this.le_async.setToken(token);
 	}
 
 	/**
-	 *  Sets the HTTP PUT boolean flag. Send logs via HTTP PUT instead of default Token TCP
+	 * Sets the HTTP PUT boolean flag. Send logs via HTTP PUT instead of default
+	 * Token TCP
 	 *
-	 *  @param httpput HttpPut flag to set
+	 * @param httpput HttpPut flag to set
 	 */
-	public void setHttpPut( boolean HttpPut) {
+	public void setHttpPut(boolean HttpPut) {
 		this.le_async.setHttpPut(HttpPut);
 	}
 
-	/** Sets the ACCOUNT KEY value for HTTP PUT
+	/**
+	 * Sets the ACCOUNT KEY value for HTTP PUT
 	 *
 	 * @param account_key
 	 */
-	public void setKey( String account_key)
-	{
+	public void setKey(String account_key) {
 		this.le_async.setKey(account_key);
 	}
 
@@ -76,8 +80,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	 *
 	 * @param log_location
 	 */
-	public void setLocation( String log_location)
-	{
+	public void setLocation(String log_location) {
 		this.le_async.setLocation(log_location);
 	}
 
@@ -86,8 +89,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	 *
 	 * @param ssl
 	 */
-	public void setSsl( boolean ssl)
-	{
+	public void setSsl(boolean ssl) {
 		this.le_async.setSsl(ssl);
 	}
 
@@ -97,7 +99,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	 *
 	 * @param debug debug flag to set
 	 */
-	public void setDebug( boolean debug) {
+	public void setDebug(boolean debug) {
 		this.le_async.setDebug(debug);
 	}
 
@@ -123,10 +125,10 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	}
 
 	/**
-	 * The <b>Facility</b> option must be set one of the strings KERN, USER, MAIL,
-	 * DAEMON, AUTH, SYSLOG, LPR, NEWS, UUCP, CRON, AUTHPRIV, FTP, NTP, AUDIT,
-	 * ALERT, CLOCK, LOCAL0, LOCAL1, LOCAL2, LOCAL3, LOCAL4, LOCAL5, LOCAL6,
-	 * LOCAL7. Case is not important.
+	 * The <b>Facility</b> option must be set one of the strings KERN, USER,
+	 * MAIL, DAEMON, AUTH, SYSLOG, LPR, NEWS, UUCP, CRON, AUTHPRIV, FTP, NTP,
+	 * AUDIT, ALERT, CLOCK, LOCAL0, LOCAL1, LOCAL2, LOCAL3, LOCAL4, LOCAL5,
+	 * LOCAL6, LOCAL7. Case is not important.
 	 *
 	 * <p>
 	 * See {@link SyslogConstants} and RFC 3164 for more information about the
@@ -140,7 +142,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	}
 
 	/**
-	 *  Sets the layout for the Appender
+	 * Sets the layout for the Appender
 	 */
 	public void setLayout(Layout<ILoggingEvent> layout) {
 		this.layout = layout;
@@ -160,11 +162,11 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 		// Render the event according to layout
 		String formattedEvent = layout.doLayout(event);
 
-
-//		 Append stack trace if present
+		// Append stack trace if present
 		IThrowableProxy error = event.getThrowableProxy();
-		if (error != null)
+		if (error != null) {
 			formattedEvent += ExceptionFormatter.formatException(error);
+		}
 
 		// Prepare to be queued
 		this.le_async.addLineToQueue(formattedEvent);
