@@ -182,7 +182,6 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
         }
 
         // Prepare to be queued
-        System.out.println(formattedEvent);
         this.le_async.addLineToQueue(formattedEvent);
     }
 
