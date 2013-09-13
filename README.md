@@ -59,7 +59,7 @@ The next file you need is logentriesappender-1.1.15.jar which is the plugin for 
 Place this in the `WEB-INF/lib` folder of your project and add it to the buildpath as done above with log4j jar.
 
 Configure the Log4J plugin
--------------------------- 
+--------------------------
 
 Download the required log4j.xml config file from <a href="https://github.com/logentries/le_java/raw/master/configFiles/log4j.xml">here</a>
 
@@ -90,7 +90,7 @@ In this file, you will see the following:
 	</log4j:configuration>
 
 Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.
-    
+
 For debugging purposes set the debug parameter to true.
 
 Logging Messages
@@ -139,7 +139,7 @@ Place this in your pom.xml
 	    <dependency>
     		<groupId>ch.qos.logback</groupId>
     		<artifactId>logback-classic</artifactId>
-    		<version>0.9.30</version>
+    		<version>1.0.11</version>
 		</dependency>
 	    <dependency>
 	        <groupId>com.logentries</groupId>
@@ -177,7 +177,7 @@ In this file, you will see the following:
 	</configuration>
 
 Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.
-    
+
 For debugging purposes set the debug parameter to true.
 
 Logging Messages
