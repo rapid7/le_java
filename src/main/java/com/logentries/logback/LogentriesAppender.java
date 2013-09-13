@@ -38,10 +38,19 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
     private String suffixPattern;
 
     /**
-     * Initializes asynchronous logging.
+     * Creates a new Logentries appender.
      */
     public LogentriesAppender() {
-        le_async = new AsyncLogger();
+        this.le_async = new AsyncLogger();
+    }
+
+    /**
+     * Creates a new Logentries appender.
+     * <p>Used for unit testing.</p>
+     * @param logger the {@link AsyncLogger} to dispatch events
+     */
+    public LogentriesAppender(AsyncLogger logger) {
+        this.le_async = logger;
     }
 
     /*
@@ -173,6 +182,7 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
         }
 
         // Prepare to be queued
+        System.out.println(formattedEvent);
         this.le_async.addLineToQueue(formattedEvent);
     }
 

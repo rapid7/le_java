@@ -1,33 +1,62 @@
 package com.logentries.logback;
 
-import static org.junit.Assert.assertEquals;
-
+import com.logentries.net.AsyncLogger;
+import junit.framework.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mockito.Mockito;
 
 public class LogentriesAppenderTest {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(LogentriesAppenderTest.class);
-	private static final String token = "some-token";
-	private static final String location = "some location";
-	private static final String accountKey = "account key";
-	private static final String facility = "DAEMON";
+    private static final String token = "some-token";
+    private static final String location = "some location";
+    private static final String accountKey = "account key";
+    private AsyncLogger client;
+    private LogentriesAppender le;
 
-	@Test
-	public void setterTests() {
-//		LogentriesAppender le = new LogentriesAppender();
-//		le.setHttpPut(true);
-//		le.setToken(token);
-//		le.setLocation(location);
-//		le.setKey(accountKey);
-//		le.setSsl(true);
-//		le.setFacility(facility);
-//		assertEquals(le.le_async.getToken(), token);
-//		assertEquals(le.le_async.getHttpPut(), true);
-//		assertEquals(le.le_async.getKey(), accountKey);
-//		assertEquals(le.le_async.getLocation(), location);
-//		assertEquals(le.le_async.getSsl(), true);
-	}
+    @Before
+    public void setUp() {
+        client = Mockito.mock(AsyncLogger.class);
+        le = new LogentriesAppender(client);
+    }
+
+    @Test
+    public void setterTests() {
+        boolean doPut = true;
+        boolean useSSL = true;
+
+        le.setHttpPut(doPut);
+        le.setToken(token);
+        le.setLocation(location);
+        le.setKey(accountKey);
+        le.setSsl(useSSL);
+
+        Mockito.verify(client).setHttpPut(doPut);
+        Mockito.verify(client).setToken(token);
+        Mockito.verify(client).setLocation(location);
+        Mockito.verify(client).setKey(accountKey);
+        Mockito.verify(client).setSsl(useSSL);
+    }
+
+    @Test
+    public void testStart() {
+        try {
+            le.start();
+        } catch (Throwable t) {
+            Assert.fail("Shouldn't throw exception on startup!");
+            return;
+        }
+        Assert.assertTrue("No exception thrown", true);
+    }
+
+    @Test
+    public void testStop() {
+        try {
+            le.stop();
+        } catch (Throwable t) {
+            Assert.fail("Shouldn't throw exception on shutdown!");
+            return;
+        }
+        Assert.assertTrue("No exception thrown", true);
+    }
 }
