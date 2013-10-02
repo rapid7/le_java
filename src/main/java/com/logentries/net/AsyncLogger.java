@@ -11,6 +11,9 @@ import org.apache.log4j.helpers.LogLog;
 /**
  * Logentries Asynchronous Logger for integration with Java logging frameworks.
  *
+ * a RevelOps™ service
+ *
+ *
  * VERSION: 1.1.9
  *
  * @author Viliam Holub
