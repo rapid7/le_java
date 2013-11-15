@@ -30,18 +30,18 @@ Maven Users
 
 Place this in your pom.xml
 
-	<dependencies>
-		<dependency>
-	    	<groupId>log4j</groupId>
-	    	<artifactId>log4j</artifactId>
-	    	<version>1.2.17</version>
-		</dependency>
-	    <dependency>
-	        <groupId>com.logentries</groupId>
-	        <artifactId>logentries-appender</artifactId>
-	        <version>RELEASE</version>
-	    </dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>com.logentries</groupId>
+            <artifactId>logentries-appender</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+    </dependencies>
 
 Manual Install
 --------------
@@ -67,27 +67,27 @@ Add this file to your project as it is the config which adds the plugin for log4
 
 In this file, you will see the following:
 
-	<?xml version="1.0" encoding="UTF-8"?>
-	<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-	<log4j:configuration debug="true">
-	<appender name="le" class="com.logentries.log4j.LogentriesAppender">
-		<!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
-		<param name="Token" value="LOGENTRIES_TOKEN" />
-		<param name="Debug" value="false" />
-		<param name="Ssl" value="false" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern"
-				value="%d{yyyy-MM-dd HH:mm:ss ZZZ} %-5p (%F:%L)  %m" />
-		</layout>
-	</appender>
-	<logger name="example">
-		<level value="debug" />
-	</logger>
-	<root>
-		<priority value="debug"></priority>
-		<appender-ref ref="le" />
-	</root>
-	</log4j:configuration>
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+    <log4j:configuration debug="true">
+    <appender name="le" class="com.logentries.log4j.LogentriesAppender">
+        <!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
+        <param name="Token" value="LOGENTRIES_TOKEN" />
+        <param name="Debug" value="false" />
+        <param name="Ssl" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%d{yyyy-MM-dd HH:mm:ss ZZZ} %-5p (%F:%L)  %m" />
+        </layout>
+    </appender>
+    <logger name="example">
+        <level value="debug" />
+    </logger>
+    <root>
+        <priority value="debug"></priority>
+        <appender-ref ref="le" />
+    </root>
+    </log4j:configuration>
 
 Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.
 
@@ -100,20 +100,20 @@ With that done, you are ready to send logs to Logentries.
 
 In each class you wish to log from, enter the following using directives at the top if not already there:
 
-	import org.apache.log4j.Logger;
-	import org.apache.log4j.LogManager;
+    import org.apache.log4j.Logger;
+    import org.apache.log4j.LogManager;
 
 Then create this object at class-level:
 
-	private static Logger log = LogManager.getRootLogger();
+    private static Logger log = LogManager.getRootLogger();
 
 Now within your code in that class, you can log using log4j as normal and it will log to Logentries.
 
 Example:
 
-	log.debug("Debugging Message");
-	log.info("Informational message");
-	log.warn("Warning Message");
+    log.debug("Debugging Message");
+    log.info("Informational message");
+    log.warn("Warning Message");
 
 
 LOGBACK
@@ -130,23 +130,23 @@ Maven Users
 
 Place this in your pom.xml
 
-	<dependencies>
-	    <dependency>
-	        <groupId>org.slf4j</groupId>
-		<artifactId>slf4j-api</artifactId>
-		<version>1.7.5</version>
-	    </dependency>
-	    <dependency>
-    		<groupId>ch.qos.logback</groupId>
-    		<artifactId>logback-classic</artifactId>
-    		<version>1.0.11</version>
-		</dependency>
-	    <dependency>
-	        <groupId>com.logentries</groupId>
-	        <artifactId>logentries-appender</artifactId>
-	        <version>RELEASE</version>
-	    </dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.logentries</groupId>
+            <artifactId>logentries-appender</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+    </dependencies>
 
 Configure the logback plugin
 ----------------------------
@@ -157,24 +157,24 @@ Add this file to your project as it is the config which adds the plugin for logb
 
 In this file, you will see the following:
 
-	<?xml version="1.0" encoding="UTF-8" ?>
-	<configuration>
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <configuration>
 
-  		<appender name="LE"
-    		class="com.logentries.logback.LogentriesAppender">
-			<Debug>False</Debug>
-    		<Token>LOGENTRIES_TOKEN</Token>
-    		<Ssl>False</Ssl>
-    		<facility>USER</facility>
-    		<layout>
-      			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    		</layout>
-  		</appender>
+        <appender name="LE"
+            class="com.logentries.logback.LogentriesAppender">
+            <Debug>False</Debug>
+            <Token>LOGENTRIES_TOKEN</Token>
+            <Ssl>False</Ssl>
+            <facility>USER</facility>
+            <layout>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </layout>
+        </appender>
 
-  		<root level="debug">
-    		<appender-ref ref="LE" />
-  		</root>
-	</configuration>
+        <root level="debug">
+            <appender-ref ref="LE" />
+        </root>
+    </configuration>
 
 Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.
 
@@ -187,17 +187,17 @@ With that done, you are ready to send logs to Logentries.
 
 In each class you wish to log from, enter the following using directives at the top if not already there:
 
-	import org.slf4j.Logger;
-	import org.slf4j.LoggerFactory;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
 
 Then create this object at class-level:
 
-	private static Logger log = LoggerFactory.getLogger("logentries");
+    private static Logger log = LoggerFactory.getLogger("logentries");
 
 Now within your code in that class, you can log using logback as normal and it will log to Logentries.
 
 Example:
 
-	log.debug("Debugging Message");
-	log.info("Informational message");
-	log.warn("Warning Message");
+    log.debug("Debugging Message");
+    log.info("Informational message");
+    log.warn("Warning Message");
