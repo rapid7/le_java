@@ -14,7 +14,7 @@ import org.apache.log4j.helpers.LogLog;
  * a RevelOps™ service
  *
  *
- * VERSION: 1.1.9
+ * VERSION: 1.2.0
  *
  * @author Viliam Holub
  * @author Mark Lacomber
@@ -28,7 +28,7 @@ public class AsyncLogger {
 	 */
 
 	/** Current Version number of library/ */
-	static final String VERSION = "1.1.9";
+	static final String VERSION = "1.2.0";
 	/** Size of the internal event queue. */
 	private static final int QUEUE_SIZE = 32768;
 	/** UTF-8 output character set. */

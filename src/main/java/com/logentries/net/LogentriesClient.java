@@ -22,18 +22,14 @@ public class LogentriesClient
 	 */
 	
 	/** Logentries API server address for Token-based input. */
-	private static final String LE_TOKEN_API = "api.logentries.com";
+	private static final String LE_TOKEN_API = "data.logentries.com";
 	/** Logentries API server address for HTTP PUT input. */
 	private static final String LE_HTTP_API = "api.logentries.com";
-	/** Port number for HTTP PUT logging on Logentries API server. */
-	private static final int LE_HTTP_PORT = 80;
-	/** Port number for SSL HTTP PUT logging on Logentries API server. */
-	private static final int LE_HTTP_SSL_PORT = 443;
-	/** Port number for Token logging on Logentries API server. */
-	private static final int LE_TOKEN_PORT = 10000;
-	/** Port number for TLS Token logging on Logentries API server. */
-	private static final int LE_TOKEN_TLS_PORT = 20000;
-	
+	/** Port number for HTTP PUT/Token TCP logging on Logentries server. */
+	private static final int LE_PORT = 80;
+	/** Port number for SSL HTTP PUT/TLS Token TCP logging on Logentries server. */
+	private static final int LE_SSL_PORT = 443;
+
 	final SSLSocketFactory ssl_factory;
 	private boolean ssl_choice = false;
 	private boolean http_choice = false;
@@ -49,10 +45,7 @@ public class LogentriesClient
 
 	public int getPort()
 	{
-		if (ssl_choice)
-			return http_choice ? LE_HTTP_SSL_PORT: LE_TOKEN_TLS_PORT;
-		else
-			return http_choice ? LE_HTTP_PORT : LE_TOKEN_PORT;
+		return ssl_choice ? LE_SSL_PORT : LE_PORT;
 	}
 
 	public String getAddress()
