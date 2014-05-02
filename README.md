@@ -72,6 +72,7 @@ In this file, you will see the following:
     <log4j:configuration debug="true">
     <appender name="le" class="com.logentries.log4j.LogentriesAppender">
         <!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
+        <!-- Or set an evironment variable like LOGENTRIES_TOKEN=bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
         <param name="Token" value="LOGENTRIES_TOKEN" />
         <param name="Debug" value="false" />
         <param name="Ssl" value="false" />
@@ -89,7 +90,7 @@ In this file, you will see the following:
     </root>
     </log4j:configuration>
 
-Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.
+Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.  Alternatively leave the Token entry empty in the log4j configuration and provide the token via an environment variable e.g., `export LOGENTRIES_TOKEN=bc0c4f90-a2d6-11e1-b3dd-0800200c9a66`.  This approach makes it easy to provide different logging tokens without repackaging when moving an app through dev, test, and prod etc.
 
 For debugging purposes set the debug parameter to true.
 
