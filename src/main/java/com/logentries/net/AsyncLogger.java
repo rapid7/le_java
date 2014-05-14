@@ -49,6 +49,8 @@ public class AsyncLogger {
 	private static final String LINE_SEP = System.getProperty("line_separator", "\n");
 	/** Error message displayed when queue overflow occurs */
     private static final String QUEUE_OVERFLOW = "\n\nLogentries Buffer Queue Overflow. Message Dropped!\n\n";
+	/** Identifier for this client library */
+	private static final String LIBRARY_ID = "###J01###";
 
     /*
 	 * Fields
@@ -65,11 +67,11 @@ public class AsyncLogger {
 	/** SSL/TLS flag. */
 	boolean ssl = false;
 	/** Debug flag. */
-	boolean debug;
+	boolean debug = false;
 	/** Make local connection only. */
-	boolean local;
+	boolean local = false;
 	/** Indicator if the socket appender has been started. */
-	boolean started;
+	boolean started = false;
 
 	/** Asynchronous socket appender. */
 	SocketAppender appender;
@@ -203,7 +205,9 @@ public class AsyncLogger {
 	AsyncLogger( boolean local) {
 		this.local = local;
 
-		queue = new ArrayBlockingQueue<String>( QUEUE_SIZE);
+		queue = new ArrayBlockingQueue<String>(QUEUE_SIZE);
+		// Fill the queue with an identifier message for first entry sent to server
+		queue.offer(LIBRARY_ID);
 
 		appender = new SocketAppender();
 	}
@@ -222,9 +226,13 @@ public class AsyncLogger {
 		if("".equals(uuid))
 			return false;
 
-		UUID u = UUID.fromString(uuid);
+		try {
+			UUID u = UUID.fromString(uuid);
+		}catch(IllegalArgumentException e){
+			return false;
+		}
 
-		return u.toString().equals(uuid);
+		return true;
 	}
 
 	/**
