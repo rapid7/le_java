@@ -48,11 +48,11 @@ public class AsyncLogger {
 	/** Platform dependent line separator to check for. Supported in Java 1.6+ */
 	private static final String LINE_SEP = System.getProperty("line_separator", "\n");
 	/** Error message displayed when queue overflow occurs */
-    private static final String QUEUE_OVERFLOW = "\n\nLogentries Buffer Queue Overflow. Message Dropped!\n\n";
+	private static final String QUEUE_OVERFLOW = "\n\nLogentries Buffer Queue Overflow. Message Dropped!\n\n";
 	/** Identifier for this client library */
-	private static final String LIBRARY_ID = "###J01###";
+	private static final String LIBRARY_ID = "###J01### - Library initialised";
 
-    /*
+	/*
 	 * Fields
 	 */
 
