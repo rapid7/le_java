@@ -163,7 +163,6 @@ In this file, you will see the following:
 
         <appender name="LE"
             class="com.logentries.logback.LogentriesAppender">
-            <Debug>False</Debug>
             <Token>LOGENTRIES_TOKEN</Token>
             <Ssl>False</Ssl>
             <facility>USER</facility>
@@ -179,7 +178,7 @@ In this file, you will see the following:
 
 Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.
 
-For debugging purposes set the debug parameter to true.
+Note that internal debug support for the appender itself is only available with log4j.
 
 Logging Messages
 ----------------
