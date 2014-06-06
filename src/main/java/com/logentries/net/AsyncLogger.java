@@ -72,11 +72,25 @@ public class AsyncLogger {
 	boolean local = false;
 	/** Indicator if the socket appender has been started. */
 	boolean started = false;
+	/**  Will be true if static block finds log4j classes */
+	private static boolean log4jPresent;
 
 	/** Asynchronous socket appender. */
 	SocketAppender appender;
 	/** Message queue. */
 	ArrayBlockingQueue<String> queue;
+
+	/*
+	* Static block determining if log4j is present
+	*/
+	static {
+		try {
+			Class.forName("org.apache.log4j.helpers.LogLog");
+			log4jPresent = true;
+		} catch (ClassNotFoundException e) {
+			log4jPresent = false;
+		}
+	}
 
 	/*
 	 * Public methods for parameters
@@ -103,7 +117,7 @@ public class AsyncLogger {
 	/**
 	 *  Sets the HTTP PUT boolean flag. Send logs via HTTP PUT instead of default Token TCP
 	 *
-	 *  @param httpput HttpPut flag to set
+	 *  @param HttpPut HttpPut flag to set
 	 */
 	public void setHttpPut( boolean HttpPut) {
 		this.httpPut = HttpPut;
@@ -318,9 +332,10 @@ public class AsyncLogger {
 	 *
 	 * @param msg message to display
 	 */
-	void dbg( String msg) {
-		if (debug)
-			LogLog.error( LE + msg);
+	void dbg(String msg) {
+		if (debug && log4jPresent) {
+			LogLog.error(LE + msg);
+		}
 	}
 
 	/**
