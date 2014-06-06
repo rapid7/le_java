@@ -85,7 +85,7 @@ public class AsyncLogger {
 	*/
 	static {
 		try {
-			Class.forName("org.apache.log4j.Logger");
+			Class.forName("org.apache.log4j.helpers.LogLog");
 			log4jPresent = true;
 		} catch (ClassNotFoundException e) {
 			log4jPresent = false;
