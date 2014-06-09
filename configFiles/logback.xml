@@ -3,8 +3,7 @@
 
   <appender name="LE"
     class="com.logentries.logback.LogentriesAppender">
-	<Debug>False</Debug>
-    <Token>LOGENTRIES_TOKEN</Token>
+	<Token>LOGENTRIES_TOKEN</Token>
     <Ssl>False</Ssl>
     <facility>USER</facility>
     <encoder>
