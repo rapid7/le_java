@@ -113,8 +113,13 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
         this.le_async.setDebug(debug);
     }
 
+	/**
+	 * Sets the suffixPattern to be the <pattern> field in the .xml configuration file
+	 *
+	 * @param encoder
+	 */
     public void setEncoder(PatternLayoutEncoder encoder) {
-        // no-op to silence initialization warnings
+        this.suffixPattern = encoder.getPattern();
     }
 
     @Override
