@@ -27,10 +27,10 @@ public class AsyncLogger {
 	 * Constants
 	 */
 
-	/** Current Version number of library/ */
-	static final String VERSION = "1.2.0";
 	/** Size of the internal event queue. */
 	private static final int QUEUE_SIZE = 32768;
+	/** Limit on individual log length ie. 16 bits */
+	private static final int LOG_LENGTH_LIMIT = 65536;
 	/** UTF-8 output character set. */
 	private static final Charset UTF8 = Charset.forName( "UTF-8");
 	/** ASCII character set used by HTTP. */
@@ -302,19 +302,29 @@ public class AsyncLogger {
 
 		// Check that we have all parameters set and socket appender running
 		if (!this.started && this.checkCredentials()) {
-			dbg( "Starting Logentries asynchronous socket appender");
+			dbg("Starting Logentries asynchronous socket appender");
 			appender.start();
 			started = true;
 		}
 
-		dbg( "Queueing " + line);
+		dbg("Queueing " + line);
 
-		// Try to append data to queue
-		if(!queue.offer( line))
-		{
-			queue.poll();
-			if(!queue.offer( line))
-				dbg( QUEUE_OVERFLOW);
+		// If individual string is too long add it to the queue recursively
+		if (line.length() > LOG_LENGTH_LIMIT) {
+			if (!queue.offer(line.substring(0, LOG_LENGTH_LIMIT))) {
+				queue.poll();
+				if (!queue.offer(line.substring(0, LOG_LENGTH_LIMIT)))
+					dbg(QUEUE_OVERFLOW);
+			}
+			addLineToQueue(line.substring(LOG_LENGTH_LIMIT, line.length()));
+
+		} else {
+			// Try to append data to queue
+			if (!queue.offer(line)) {
+				queue.poll();
+				if (!queue.offer(line))
+					dbg(QUEUE_OVERFLOW);
+			}
 		}
 	}
 
