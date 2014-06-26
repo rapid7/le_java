@@ -29,8 +29,8 @@ public class AsyncLogger {
 
 	/** Size of the internal event queue. */
 	private static final int QUEUE_SIZE = 32768;
-	/** Limit on individual log length ie. 16 bits */
-	private static final int LOG_LENGTH_LIMIT = 65536;
+	/** Limit on individual log length ie. 2^16*/
+	public static final int LOG_LENGTH_LIMIT = 65536;
 	/**	Limit on recursion for appending long logs to queue */
 	private static final int RECURSION_LIMIT = 32;
 	/** UTF-8 output character set. */
