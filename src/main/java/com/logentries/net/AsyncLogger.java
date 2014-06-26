@@ -2,11 +2,13 @@ package com.logentries.net;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.helpers.LogLog;
+import sun.rmi.runtime.Log;
 
 /**
  * Logentries Asynchronous Logger for integration with Java logging frameworks.
@@ -30,7 +32,9 @@ public class AsyncLogger {
 	/** Size of the internal event queue. */
 	private static final int QUEUE_SIZE = 32768;
 	/** Limit on individual log length ie. 16 bits */
-	private static final int LOG_LENGTH_LIMIT = 65536;
+	private static final int LOG_LENGTH_LIMIT = 65;//536;
+	/**	Limit on recursion for appending long logs to queue */
+	private static final int RECURSION_LIMIT = 32;
 	/** UTF-8 output character set. */
 	private static final Charset UTF8 = Charset.forName( "UTF-8");
 	/** ASCII character set used by HTTP. */
@@ -298,7 +302,14 @@ public class AsyncLogger {
 	 *
 	 * @param line line to append
 	 */
-	public void addLineToQueue( String line) {
+	public void addLineToQueue(String line) {
+			addLineToQueue(line, RECURSION_LIMIT);
+	}
+
+	private void addLineToQueue (String line, int limit) {
+		if (limit == 0) {
+			throw new LogTooLongException();
+		}
 
 		// Check that we have all parameters set and socket appender running
 		if (!this.started && this.checkCredentials()) {
@@ -309,14 +320,14 @@ public class AsyncLogger {
 
 		dbg("Queueing " + line);
 
-		// If individual string is too long add it to the queue recursively
+		// If individual string is too long add it to the queue recursively as sub-strings
 		if (line.length() > LOG_LENGTH_LIMIT) {
 			if (!queue.offer(line.substring(0, LOG_LENGTH_LIMIT))) {
 				queue.poll();
 				if (!queue.offer(line.substring(0, LOG_LENGTH_LIMIT)))
 					dbg(QUEUE_OVERFLOW);
 			}
-			addLineToQueue(line.substring(LOG_LENGTH_LIMIT, line.length()));
+			addLineToQueue(line.substring(LOG_LENGTH_LIMIT, line.length()), limit - 1);
 
 		} else {
 			// Try to append data to queue
