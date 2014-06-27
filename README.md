@@ -201,3 +201,9 @@ Example:
     log.debug("Debugging Message");
     log.info("Informational message");
     log.warn("Warning Message");
+
+
+Maximum Log Length
+==================
+
+Currently logs which exceed 65536 characters in length, including any patterns and timestamps you may include, will be split and sent as multiple logs.
