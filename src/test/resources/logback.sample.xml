@@ -7,7 +7,6 @@
 	</appender>
 
     <appender name="LE" class="com.logentries.logback.LogentriesAppender">
-        <Debug>True</Debug>
         <Token>*</Token>
         <Ssl>False</Ssl>
         <facility>USER</facility>
