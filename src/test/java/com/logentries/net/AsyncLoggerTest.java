@@ -26,15 +26,6 @@ public class AsyncLoggerTest {
 	}
 
 	@Test
-	public void testGetAndSetDebug()
-	{
-		AsyncLogger async = new AsyncLogger();
-		assertFalse("debug should be false by default", async.getDebug());
-		async.setDebug(true);
-		assertTrue("getDebug should have returned true", async.getDebug());
-	}
-
-	@Test
 	public void testGetAndSetSsl()
 	{
 		AsyncLogger async = new AsyncLogger();

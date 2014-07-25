@@ -1,6 +1,13 @@
-target
 .directory
+/target
 .project
-.settings
 .classpath
+.cache
+/.settings
+lib
 .idea
+*.iml
+release.properties
+*.db
+.DS_Store
+
