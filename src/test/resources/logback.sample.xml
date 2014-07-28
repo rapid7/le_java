@@ -2,23 +2,24 @@
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-        	<pattern>%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %-32.32C %4L | %m%n</pattern>
+			<pattern>%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %-32.32C %4L | %m%n</pattern>
 		</encoder>
 	</appender>
 
-    <appender name="LE" class="com.logentries.logback.LogentriesAppender">
-        <Token>*</Token>
-        <Ssl>False</Ssl>
-        <facility>USER</facility>
-        <layout>
-        	<pattern>%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %-32.32C %4L | %m%n</pattern>
-            <!-- pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern-->
-        </layout>
-    </appender>
+	<appender name="LE" class="com.logentries.logback.LogentriesAppender">
+		<Token>*</Token>
+		<Debug>False</Debug>
+		<Ssl>False</Ssl>
+		<facility>USER</facility>
+		<layout>
+			<pattern>%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %-32.32C %4L | %m%n</pattern>
+			<!-- pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern-->
+		</layout>
+	</appender>
 
 	<root level="DEBUG">
-		<appender-ref ref="STDOUT"/>
-		<appender-ref ref="LE"/>
+	<appender-ref ref="STDOUT"/>
+	<appender-ref ref="LE"/>
 	</root>
 
 </configuration>
