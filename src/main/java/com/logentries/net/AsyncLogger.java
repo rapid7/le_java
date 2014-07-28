@@ -46,11 +46,11 @@ public class AsyncLogger {
 	/** Platform dependent line separator to check for. Supported in Java 1.6+ */
 	private static final String LINE_SEP = System.getProperty("line_separator", "\n");
 	/** Error message displayed when invalid API key is detected. */
-	private static final String INVALID_TOKEN = LINE_SEP+LINE_SEP+"It appears your LOGENTRIES_TOKEN parameter in log4j.xml is incorrect!"+LINE_SEP+LINE_SEP;
+	private static final String INVALID_TOKEN = "\n\nIt appears your LOGENTRIES_TOKEN parameter in log4j.xml is incorrect!\n\n";
 	/** Key Value for Token Environment Variable. */
 	private static final String CONFIG_TOKEN = "LOGENTRIES_TOKEN";
 	/** Error message displayed when queue overflow occurs */
-	private static final String QUEUE_OVERFLOW = LINE_SEP+LINE_SEP+"Logentries Buffer Queue Overflow. Message Dropped!"+LINE_SEP+LINE_SEP;
+	private static final String QUEUE_OVERFLOW = "\n\nLogentries Buffer Queue Overflow. Message Dropped!\n\n";
 	/** Identifier for this client library */
 	private static final String LIBRARY_ID = "###J01### - Library initialised";
 
@@ -74,8 +74,6 @@ public class AsyncLogger {
 	boolean local = false;
 	/** Indicator if the socket appender has been started. */
 	boolean started = false;
-	/**  Will be true if static block finds log4j classes */
-	private static boolean log4jPresent;
 
 	/** Asynchronous socket appender. */
 	SocketAppender appender;
@@ -475,7 +473,7 @@ public class AsyncLogger {
 			} catch (InterruptedException e) {
 				// We got interrupted, stop
 				dbg( "Asynchronous socket writer interrupted");
-				dbg("Queue Size had "+queue.size()+" lines left in it");
+				dbg("Queue had "+queue.size()+" lines left in it");
 			}
 
 			closeConnection();
