@@ -43,12 +43,12 @@ public class AsyncLogger {
 	private static final int MAX_DELAY = 10000;
 	/** LE appender signature - used for debugging messages. */
 	private static final String LE = "LE ";
+	/** Platform dependent line separator to check for. Supported in Java 1.6+ */
+	private static final String LINE_SEP = System.getProperty("line_separator", "\n");
 	/** Error message displayed when invalid API key is detected. */
 	private static final String INVALID_TOKEN = "\n\nIt appears your LOGENTRIES_TOKEN parameter in log4j.xml is incorrect!\n\n";
 	/** Key Value for Token Environment Variable. */
 	private static final String CONFIG_TOKEN = "LOGENTRIES_TOKEN";
-	/** Platform dependent line separator to check for. Supported in Java 1.6+ */
-	private static final String LINE_SEP = System.getProperty("line_separator", "\n");
 	/** Error message displayed when queue overflow occurs */
 	private static final String QUEUE_OVERFLOW = "\n\nLogentries Buffer Queue Overflow. Message Dropped!\n\n";
 	/** Identifier for this client library */
@@ -74,25 +74,11 @@ public class AsyncLogger {
 	boolean local = false;
 	/** Indicator if the socket appender has been started. */
 	boolean started = false;
-	/**  Will be true if static block finds log4j classes */
-	private static boolean log4jPresent;
 
 	/** Asynchronous socket appender. */
 	SocketAppender appender;
 	/** Message queue. */
 	ArrayBlockingQueue<String> queue;
-
-	/*
-	* Static block determining if log4j is present
-	*/
-	static {
-		try {
-			Class.forName("org.apache.log4j.helpers.LogLog");
-			log4jPresent = true;
-		} catch (ClassNotFoundException e) {
-			log4jPresent = false;
-		}
-	}
 
 	/*
 	 * Public methods for parameters
@@ -350,8 +336,12 @@ public class AsyncLogger {
 	 * @param msg message to display
 	 */
 	void dbg(String msg) {
-		if (debug && log4jPresent) {
-			LogLog.error(LE + msg);
+		if (debug ) {
+			if (!msg.endsWith(LINE_SEP)) {
+				System.err.println(LE + msg);
+			} else {
+				System.err.print(LE + msg);
+			}
 		}
 	}
 
@@ -483,6 +473,7 @@ public class AsyncLogger {
 			} catch (InterruptedException e) {
 				// We got interrupted, stop
 				dbg( "Asynchronous socket writer interrupted");
+				dbg("Queue had "+queue.size()+" lines left in it");
 			}
 
 			closeConnection();
