@@ -253,14 +253,14 @@ To log to a DataHub we can change logback.xml configuration to send logs to your
     </configuration>
 
 The extra parameters are the following,
-
+```
  <IsUsingDataHub>True</IsUsingDataHub>: Sent to a DataHub instance if true.
  <DataHubAddr>localhost</DataHubAddr>: The IP of the DataHub instance that we will connect to.
  <DataHubPort>10000</DataHubPort>: The Port of the DataHub instance that we will connect to.
  <LogHostName>true</LogHostName>: Prefixes log messages with a HostName
  <HostName>MyHost</HostName>: The HostName to prefix each log message with. If not set will be automatically detected.
  <LogID>MyLog</LogID>: The LogID to be prefixed with each log message. If not set it will not be logged.
-
+```
 Logging Messages
 ----------------
 
