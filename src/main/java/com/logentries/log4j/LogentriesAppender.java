@@ -12,7 +12,7 @@ import com.logentries.net.AsyncLogger;
  * 
  */
 public class LogentriesAppender extends AppenderSkeleton {
-    
+	
 	/*
 	 * Fields
 	 */
@@ -83,7 +83,61 @@ public class LogentriesAppender extends AppenderSkeleton {
 	public void setDebug( boolean debug) {
 		this.le_async.setDebug(debug);
 	}
-	
+
+	/**
+	 * Sets the flag which determines if DataHub instance is used instead of Logentries service.
+	 *
+	 * @param useDataHub set to true to send log messaged to a DataHub instance.
+	 */
+	public void setIsUsingDataHub(boolean useDataHub){
+		this.le_async.setUseDataHub(useDataHub);
+	}
+
+	/**
+	 * Sets the address where DataHub server resides.
+	 *
+	 * @param dataHubAddr address like "127.0.0.1"
+	 */
+	public void setDataHubAddr(String dataHubAddr){
+		this.le_async.setDataHubAddr(dataHubAddr);
+	}
+
+	/**
+	 * Sets the port number on which DataHub instance waits for log messages.
+	 *
+	 * @param dataHubPort
+	 */
+	public void setDataHubPort(int dataHubPort){
+		this.le_async.setDataHubPort(dataHubPort);
+	}
+
+	/**
+	 * Determines whether to send HostName alongside with the log message
+	 *
+	 * @param logHostName
+	 */
+	public void setLogHostName(boolean logHostName) { 
+		this.le_async.setLogHostName(logHostName); 
+	}
+
+	/**
+	 * Sets the HostName from the configuration
+	 *
+	 * @param hostName
+	 */
+	public void setHostName(String hostName) { 
+		this.le_async.setHostName(hostName); 
+	}
+
+	/**
+	 * Sets LogID parameter from the configuration
+	 *
+	 * @param logID
+	 */
+	public void setLogID(String logID) { 
+		this.le_async.setLogID(logID); 
+	}
+
 	/**
 	 * Implements AppenderSkeleton Append method, handles time and format
 	 * 
