@@ -54,7 +54,7 @@ Retrieve log4j jar file and place it the `WEB-INF/lib` folder of your project.
 
 Then add it to the build path from within your project.
 
-The next file you need is logentriesappender-1.1.24.jar which is the plugin for log4j. You can get it <a href="http://search.maven.org/remotecontent?filepath=com/logentries/logentries-appender/1.1.24/logentries-appender-1.1.24.jar">here.</a>
+The next file you need is logentriesappender-1.1.27.jar which is the plugin for log4j. You can get it <a href="http://search.maven.org/remotecontent?filepath=com/logentries/logentries-appender/1.1.27/logentries-appender-1.1.27.jar">here.</a>
 
 Place this in the `WEB-INF/lib` folder of your project and add it to the buildpath as done above with log4j jar.
 
@@ -93,6 +93,50 @@ In this file, you will see the following:
 Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.  Alternatively leave the Token entry empty in the log4j configuration and provide the token via an environment variable e.g., `export LOGENTRIES_TOKEN=bc0c4f90-a2d6-11e1-b3dd-0800200c9a66`.  This approach makes it easy to provide different logging tokens without repackaging when moving an app through dev, test, and prod etc.
 
 For debugging purposes set the debug parameter to true.
+
+DataHub Logging
+---------------
+
+To log to a DataHub we can change log4j.xml configuration to send logs to your instance of DataHub.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+    <log4j:configuration debug="true">
+    <appender name="le" class="com.logentries.log4j.LogentriesAppender">
+        <!-- Enter your Logentries token, like bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
+        <!-- Or set an evironment variable like LOGENTRIES_TOKEN=bc0c4f90-a2d6-11e1-b3dd-0800200c9a66 -->
+        <param name="Token" value="LOGENTRIES_TOKEN" />
+        <param name="Debug" value="false" />
+        <param name="Ssl" value="false" />
+		<param name="IsUsingDataHub" value="true"/>
+		<param name="DataHubAddr" value="localhost"/>
+		<param name="DataHubPort" value="10000"/>
+		<param name="LogHostName" value="true"/>
+		<param name="HostName" value="TestHost*001"/>
+		<param name="LogID" value="JavaTestID"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%d{yyyy-MM-dd HH:mm:ss ZZZ} %-5p (%F:%L)  %m" />
+        </layout>
+    </appender>
+    <logger name="example">
+        <level value="debug" />
+    </logger>
+    <root>
+        <priority value="debug"></priority>
+        <appender-ref ref="le" />
+    </root>
+    </log4j:configuration>
+
+The extra parameters are the following,
+
+	<param name="IsUsingDataHub" value="true"/>: Sent to a DataHub instance if true.
+	<param name="DataHubAddr" value="localhost"/>: The IP of the DataHub instance that we will connect to.
+	<param name="DataHubPort" value="10000"/>: The Port of the DataHub instance that we will connect to.
+	<param name="LogHostName" value="true"/>: Prefixes log messages with a HostName
+	<param name="HostName" value="TestHost*001"/>: The HostName to prefix each log message with. If not set will be automatically detected.
+	<param name="LogID" value="JavaTestID"/>: The LogID to be prefixed with each log message. If not set it will not be logged.
+
 
 Logging Messages
 ----------------
@@ -179,6 +223,43 @@ In this file, you will see the following:
 Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.
 
 Note that internal debug support for the appender itself is only available with log4j.
+
+Logging to DataHub
+----------------
+
+To log to a DataHub we can change logback.xml configuration to send logs to your instance of DataHub as seeb below.
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <configuration>
+
+        <appender name="LE"
+            class="com.logentries.logback.LogentriesAppender">
+            <Token>LOGENTRIES_TOKEN</Token>
+            <Ssl>False</Ssl>
+            <IsUsingDataHub>True</IsUsingDataHub>
+            <DataHubAddr>localhost</DataHubAddr>
+            <DataHubPort>10000</DataHubPort>
+            <LogHostName>true</LogHostName>
+            <LogID>MyLog</LogID>
+            <facility>USER</facility>
+            <layout>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </layout>
+        </appender>
+
+        <root level="debug">
+            <appender-ref ref="LE" />
+        </root>
+    </configuration>
+
+The extra parameters are the following,
+
+ <IsUsingDataHub>True</IsUsingDataHub>: Sent to a DataHub instance if true.
+ <DataHubAddr>localhost</DataHubAddr>: The IP of the DataHub instance that we will connect to.
+ <DataHubPort>10000</DataHubPort>: The Port of the DataHub instance that we will connect to.
+ <LogHostName>true</LogHostName>: Prefixes log messages with a HostName
+ <HostName>MyHost</HostName>: The HostName to prefix each log message with. If not set will be automatically detected.
+ <LogID>MyLog</LogID>: The LogID to be prefixed with each log message. If not set it will not be logged.
 
 Logging Messages
 ----------------
