@@ -423,18 +423,10 @@ public class AsyncLogger {
 	private void addLineToQueue (String line, int limit) {
 		if (limit == 0) { throw new LogTooLongException(); }
 
-		boolean credentialsOk = false;
-
-		// Check credentials only if logs are sent to LE directly.
-		// In DataHub mode credentials are not used and may be not defined at all.
-		if(!useDataHub)
-		{
-			credentialsOk = this.checkCredentials();
-		}
-
+		//// Check credentials only if logs are sent to LE directly.
 		// Check that we have all parameters set and socket appender running.
 		// If DataHub mode is used then credentials check is ignored.
-		if (!this.started && (useDataHub || credentialsOk)) {
+		if (!this.started && (useDataHub || this.checkCredentials())) {
 			dbg("Starting Logentries asynchronous socket appender");
 			appender.start();
 			started = true;
@@ -577,6 +569,39 @@ public class AsyncLogger {
 		}
 
 		/**
+		 * Builds the prefix message for the StringBuilder.
+		 * @return StringBuilder
+		 */
+		public StringBuilder buildPrefixMessage(StringBuilder sb){
+			if(!logID.isEmpty()) {
+				sb.append(logID).append(" "); // Append LogID and separator between logID and the rest part of the message.
+			}
+
+			if(logHostName)	{
+				if(hostName.isEmpty()) {
+					dbg("Host name is not defined by user - trying to obtain it from the environment.");
+					try {
+						hostName = InetAddress.getLocalHost().getHostName();
+						sb.append("HostName=").append(hostName).append(" ");
+					}
+					catch (UnknownHostException e) {
+						// We cannot resolve local host name - so won't use it at all.
+						dbg("Failed to get host name automatically; Host name will not be used in prefix.");
+					}
+				} else {
+					if(!checkIfHostNameValid(hostName))	{
+						// User-defined HostName is invalid - e.g. with prohibited characters,
+						// so we'll not use it.
+						dbg("There are some prohibited characters found in the host name defined in the config; Host name will not be used in prefix.");
+					} else {
+						sb.append("HostName=").append(hostName).append(" ");
+					}
+				}
+			}
+			return sb;
+		}
+
+		/**
 		 * Initializes the connection and starts to log.
 		 *
 		 */
@@ -589,31 +614,7 @@ public class AsyncLogger {
 				String logMessagePrefix = "";
 				StringBuilder sb = new StringBuilder(logMessagePrefix);
 
-				if(!logID.isEmpty()) {
-					sb.append(logID).append(" "); // Append LogID and separator between logID and the rest part of the message.
-				}
-
-				if(logHostName)	{
-					if(hostName.isEmpty()) {
-						dbg("Host name is not defined by user - trying to obtain it from the environment.");
-						try {
-							hostName = InetAddress.getLocalHost().getHostName();
-							sb.append("HostName=").append(hostName).append(" ");
-						}
-						catch (UnknownHostException e) {
-							// We cannot resolve local host name - so won't use it at all.
-							dbg("Failed to get host name automatically; Host name will not be used in prefix.");
-						}
-					} else {
-						if(!checkIfHostNameValid(hostName))	{
-							// User-defined HostName is invalid - e.g. with prohibited characters,
-							// so we'll not use it.
-							dbg("There are some prohibited characters found in the host name defined in the config; Host name will not be used in prefix.");
-						} else {
-							sb.append("HostName=").append(hostName).append(" ");
-						}
-					}
-				}
+				sb = buildPrefixMessage(sb);
 
 				boolean logPrefixEmpty;
 				if(!(logPrefixEmpty = sb.toString().isEmpty()))	{
