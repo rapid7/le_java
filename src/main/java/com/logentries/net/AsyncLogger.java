@@ -570,9 +570,8 @@ public class AsyncLogger {
 
 		/**
 		 * Builds the prefix message for the StringBuilder.
-		 * @return StringBuilder
 		 */
-		public StringBuilder buildPrefixMessage(StringBuilder sb){
+		private void buildPrefixMessage(StringBuilder sb){
 			if(!logID.isEmpty()) {
 				sb.append(logID).append(" "); // Append LogID and separator between logID and the rest part of the message.
 			}
@@ -598,7 +597,6 @@ public class AsyncLogger {
 					}
 				}
 			}
-			return sb;
 		}
 
 		/**
@@ -614,7 +612,7 @@ public class AsyncLogger {
 				String logMessagePrefix = "";
 				StringBuilder sb = new StringBuilder(logMessagePrefix);
 
-				sb = buildPrefixMessage(sb);
+				buildPrefixMessage(sb);
 
 				boolean logPrefixEmpty;
 				if(!(logPrefixEmpty = sb.toString().isEmpty()))	{
