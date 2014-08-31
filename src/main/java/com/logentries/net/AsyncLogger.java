@@ -1,10 +1,13 @@
 package com.logentries.net;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.helpers.LogLog;
 
@@ -54,6 +57,9 @@ public class AsyncLogger {
 	/** Identifier for this client library */
 	private static final String LIBRARY_ID = "###J01### - Library initialised";
 
+	/** Reg.ex. that is used to check correctness of HostName if it is defined by user */
+	private static final Pattern HOSTNAME_REGEX = Pattern.compile("[$/\\\"&+,:;=?#|<>_* \\[\\]]");
+
 	/*
 	 * Fields
 	 */
@@ -72,6 +78,19 @@ public class AsyncLogger {
 	boolean debug = false;
 	/** Make local connection only. */
 	boolean local = false;
+	/** UseDataHub flag. */
+	boolean useDataHub = false;
+	/** DataHubAddr - address of the server where DataHub instance resides. */
+	String dataHubAddr = null;
+	/** DataHubPort - port on which DataHub instance waits for messages */
+	int dataHubPort;
+	/** LogHostName - switch that determines whether HostName should be appended to the log message */
+	boolean logHostName = false;
+	/** HostName - value, that should be appended to the log message if logHostName is set to true */
+	String hostName = "";
+	/** LogID - user-defined ID string that is appended to the log message if non-empty */
+	String logID = "";
+
 	/** Indicator if the socket appender has been started. */
 	boolean started = false;
 
@@ -124,8 +143,7 @@ public class AsyncLogger {
 	 *
 	 * @param account_key
 	 */
-	public void setKey( String account_key)
-	{
+	public void setKey( String account_key)	{
 		this.key = account_key;
 	}
 
@@ -134,8 +152,7 @@ public class AsyncLogger {
 	 *
 	 * @return key
 	 */
-	public String getKey()
-	{
+	public String getKey() {
 		return this.key;
 	}
 
@@ -144,8 +161,7 @@ public class AsyncLogger {
 	 *
 	 * @param log_location
 	 */
-	public void setLocation( String log_location)
-	{
+	public void setLocation( String log_location) {
 		this.location = log_location;
 	}
 
@@ -164,8 +180,7 @@ public class AsyncLogger {
 	 *
 	 * @param ssl
 	 */
-	public void setSsl( boolean ssl)
-	{
+	public void setSsl( boolean ssl) {
 		this.ssl = ssl;
 	}
 
@@ -174,8 +189,7 @@ public class AsyncLogger {
 	 *
 	 * @return ssl
 	 */
-	public boolean getSsl()
-	{
+	public boolean getSsl()	{
 		return this.ssl;
 	}
 
@@ -197,6 +211,114 @@ public class AsyncLogger {
 	 */
 	public boolean getDebug() {
 		return debug;
+	}
+
+	/**
+	 * Sets useDataHub flag. If set to "true" then messages will be sent to a DataHub instance.
+	 *
+	 * @param isUsingDataHub
+	 */
+	public void setUseDataHub(boolean isUsingDataHub) {
+		this.useDataHub = isUsingDataHub;
+	}
+
+	/**
+	 * Gets value of useDataHub flag.
+	 *
+	 * @return true if a DataHub instance is used as receiver for log messages.
+	 */
+	public boolean getUseDataHub() {
+		return this.useDataHub;
+	}
+
+	/**
+	 * Sets DataHub instance address.
+	 *
+	 * @param dataHubAddr
+	 */
+	public void setDataHubAddr(String dataHubAddr) {
+		this.dataHubAddr = dataHubAddr;
+	}
+
+	/**
+	 * Gets DataHub instance address.
+	 *
+	 * @return DataHub address represented as String
+	 */
+	public String getDataHubAddr() {
+		return this.dataHubAddr;
+	}
+
+	/**
+	 * Sets port on which DataHub waits for log messages.
+	 *
+	 * @param dataHubPort
+	 */
+	public void setDataHubPort(int dataHubPort) {
+		this.dataHubPort = dataHubPort;
+	}
+
+	/**
+	 * Gets port on which DataHub waits for log messages.
+	 *
+	 * @return port number.
+	 */
+	public int getDataHubPort() {
+		return this.dataHubPort;
+	}
+
+	/**
+	 * Sets value of the switch that determines whether to send HostName alongside with the log message
+	 *
+	 * @param logHostName
+	 */
+	public void setLogHostName(boolean logHostName) { 
+		this.logHostName = logHostName; 
+	}
+
+	/**
+	 * Gets value of the switch that determines whether to send HostName alongside with the log message
+	 *
+	 * @return logHostName switch value
+	 */
+	public boolean getLogHostName() { 
+		return this.logHostName; 
+	}
+
+	/**
+	 * Sets the HostName from configuration
+	 *
+	 * @param hostName
+	 */
+	public void setHostName(String hostName) { 
+		this.hostName = hostName; 
+	}
+
+	/**
+	 * Gets HostName parameter
+	 *
+	 * @return Host name field value
+	 */
+	public String getHostName() { 
+		return this.hostName; 
+	}
+
+	/**
+	 * Sets LogID parameter from config
+	 *
+	 * @param logID
+	 */
+	public void setLogID(String logID) { 
+		this.logID = logID; 
+	}
+
+	/**
+	 * Gets LogID parameter
+	 *
+	 * @return logID field value
+	 */
+	public String getLogID() { 
+		return this.logID; 
 	}
 
 	/**
@@ -279,6 +401,14 @@ public class AsyncLogger {
 	}
 
 	/**
+	 * Checks whether given host name is valid (e.g. does not contain any prohibited characters)
+	 * @param hostName - string containing host name
+	 */
+	boolean checkIfHostNameValid(String hostName) {
+		return !HOSTNAME_REGEX.matcher(hostName).find();
+	}
+
+	/**
 	 * Adds the data to internal queue to be sent over the network.
 	 *
 	 * It does not block. If the queue is full, it removes latest event first to
@@ -293,8 +423,10 @@ public class AsyncLogger {
 	private void addLineToQueue (String line, int limit) {
 		if (limit == 0) { throw new LogTooLongException(); }
 
-		// Check that we have all parameters set and socket appender running
-		if (!this.started && this.checkCredentials()) {
+		//// Check credentials only if logs are sent to LE directly.
+		// Check that we have all parameters set and socket appender running.
+		// If DataHub mode is used then credentials check is ignored.
+		if (!this.started && (useDataHub || this.checkCredentials())) {
 			dbg("Starting Logentries asynchronous socket appender");
 			appender.start();
 			started = true;
@@ -373,8 +505,9 @@ public class AsyncLogger {
 		 */
 		void openConnection() throws IOException {
 			try{
-				if(this.le_client == null)
-					this.le_client = new LogentriesClient(httpPut, ssl);
+				if(this.le_client == null){
+					this.le_client = new LogentriesClient(httpPut, ssl, useDataHub, dataHubAddr, dataHubPort);
+				}
 
 				this.le_client.connect();
 
@@ -436,6 +569,37 @@ public class AsyncLogger {
 		}
 
 		/**
+		 * Builds the prefix message for the StringBuilder.
+		 */
+		private void buildPrefixMessage(StringBuilder sb){
+			if(!logID.isEmpty()) {
+				sb.append(logID).append(" "); // Append LogID and separator between logID and the rest part of the message.
+			}
+
+			if(logHostName)	{
+				if(hostName.isEmpty()) {
+					dbg("Host name is not defined by user - trying to obtain it from the environment.");
+					try {
+						hostName = InetAddress.getLocalHost().getHostName();
+						sb.append("HostName=").append(hostName).append(" ");
+					}
+					catch (UnknownHostException e) {
+						// We cannot resolve local host name - so won't use it at all.
+						dbg("Failed to get host name automatically; Host name will not be used in prefix.");
+					}
+				} else {
+					if(!checkIfHostNameValid(hostName))	{
+						// User-defined HostName is invalid - e.g. with prohibited characters,
+						// so we'll not use it.
+						dbg("There are some prohibited characters found in the host name defined in the config; Host name will not be used in prefix.");
+					} else {
+						sb.append("HostName=").append(hostName).append(" ");
+					}
+				}
+			}
+		}
+
+		/**
 		 * Initializes the connection and starts to log.
 		 *
 		 */
@@ -445,6 +609,20 @@ public class AsyncLogger {
 				// Open connection
 				reopenConnection();
 
+				String logMessagePrefix = "";
+				StringBuilder sb = new StringBuilder(logMessagePrefix);
+
+				buildPrefixMessage(sb);
+
+				boolean logPrefixEmpty;
+				if(!(logPrefixEmpty = sb.toString().isEmpty()))	{
+					logMessagePrefix = sb.toString();
+				}
+
+				// Use StringBuilder here because if use just overloaded
+				// + operator it may give much more work for allocator and GC.
+				StringBuilder finalDataBuilder = new StringBuilder("");
+
 				// Send data in queue
 				while (true) {
 					// Take data from queue
@@ -453,10 +631,25 @@ public class AsyncLogger {
 					// Replace platform-independent carriage return with unicode line separator character to format multi-line events nicely in Logentries UI
 					data = data.replace(LINE_SEP, "\u2028");
 
-					String final_data = (!httpPut ? token + data : data) + '\n';
+					finalDataBuilder.setLength(0); // Clear the buffer to be re-used - it may be faster than re-allocating space for new String instances.
+
+					// If we're neither sending to DataHub nor using HTTP PUT
+					// then append the token to the start of the message.
+					if(!httpPut && !useDataHub)	{
+						finalDataBuilder.append(token);
+					}
+
+					// If message prefix (LogID + HostName) is not empty
+					// then add it to the message.
+					if(!logPrefixEmpty)	{
+						finalDataBuilder.append(logMessagePrefix);
+					}
+
+					// Append the event data
+					finalDataBuilder.append(data).append('\n');
 
 					// Get bytes of final event
-					byte[] finalLine = final_data.getBytes(UTF8);
+					byte[] finalLine = finalDataBuilder.toString().getBytes(UTF8);
 
 					// Send data, reconnect if needed
 					while (true) {

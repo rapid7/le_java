@@ -35,27 +35,50 @@ public class LogentriesClient
 	private boolean http_choice = false;
 	private Socket socket;
 	private OutputStream stream;
+	private String dataHubServer = LE_TOKEN_API;
+	private int dataHubPort = LE_PORT;
+	private boolean useDataHub = false;
 	
-	public LogentriesClient(boolean httpPut, boolean ssl)
+	public LogentriesClient(boolean httpPut, boolean ssl, boolean isUsingDataHub, String server, int port)
 	{
-		ssl_factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-		ssl_choice = ssl;
-		http_choice = httpPut;
+		if(isUsingDataHub){
+			ssl_factory = null; // DataHub does not support input over SSL for now,
+			ssl_choice = false; // so SSL flag is ignored
+			useDataHub = isUsingDataHub;
+			dataHubServer = server;
+			dataHubPort = port;
+		}
+		else{
+			ssl_factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			ssl_choice = ssl;
+			http_choice = httpPut;
+		}
 	}
 
 	public int getPort()
 	{
-		return ssl_choice ? LE_SSL_PORT : LE_PORT;
+		if(useDataHub)
+		{
+			return dataHubPort;
+		}
+		else{
+			return ssl_choice ? LE_SSL_PORT : LE_PORT;
+		}
 	}
 
 	public String getAddress()
 	{
-		return http_choice ? LE_HTTP_API : LE_TOKEN_API;
+		if(useDataHub)
+		{
+			return dataHubServer;
+		}
+		else{
+			return http_choice ? LE_HTTP_API : LE_TOKEN_API;
+		}
 	}
 	
 	public void connect() throws UnknownHostException, IOException
 	{
-		// Open physical connection
 		if(ssl_choice) {
 			if(http_choice)
 			{
@@ -69,7 +92,7 @@ public class LogentriesClient
 		}else{
 			socket = new Socket( getAddress(), getPort() );
 		}
-		
+
 		this.stream = socket.getOutputStream();
 	}
 	
