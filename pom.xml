@@ -17,7 +17,7 @@
     <packaging>jar</packaging>
     <name>Logentries Appender</name>
     <version>1.1.28-SNAPSHOT</version>
-    <description>Contains logback and log4j appenders that will send log data to Logentries</description>
+    <description>Contains logback, log4j, and log4j2 appenders that will send log data to Logentries</description>
     <url>https://github.com/logentries/le_java</url>
     <licenses>
         <license>
@@ -111,6 +111,18 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.1</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.1</version>
             <optional>true</optional>
         </dependency>
         <dependency>
