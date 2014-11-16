@@ -19,7 +19,6 @@ public class LogentriesManager extends AbstractManager
 
     static class LogentriesManagerFactory implements ManagerFactory<LogentriesManager, FactoryData>
     {
-
         @Override
         public LogentriesManager createManager(String name, FactoryData data)
         {
@@ -35,7 +34,7 @@ public class LogentriesManager extends AbstractManager
         asyncLogger = new AsyncLogger();
         asyncLogger.setToken(data.getToken());
         asyncLogger.setKey(data.getKey());
-        asyncLogger.setLocation(data.getLocation());
+        asyncLogger.setLocation(nullToEmpty(data.getLocation()));
         asyncLogger.setHttpPut(data.isHttpPut());
         asyncLogger.setSsl(data.isSsl());
         asyncLogger.setDebug(data.isDebug());
@@ -43,18 +42,23 @@ public class LogentriesManager extends AbstractManager
         asyncLogger.setDataHubAddr(data.getDataHubAddr());
         asyncLogger.setDataHubPort(data.getDataHubPort());
         asyncLogger.setLogHostName(data.isLogHostName());
-        asyncLogger.setHostName(data.getHostName());
+        // AsyncLogger doesn't like it when hostName is null. [jsd]
+        asyncLogger.setHostName(nullToEmpty(data.getHostName()));
         // AsyncLogger doesn't like it when logID is null. [jsd]
-        asyncLogger.setLogID(data.getLogID() == null ? "" : data.getLogID());
-        asyncLogger.setDebug(true);
+        asyncLogger.setLogID(nullToEmpty(data.getLogID()));
+        LOGGER.debug("AsyncLogger created.");
     }
 
+    private String nullToEmpty(String s)
+    {
+        return s == null ? "" : s;
+    }
     @Override
     protected void releaseSub()
     {
         super.releaseSub();
-        LOGGER.info("Closing AsyncLogger ...");
         asyncLogger.close();
+        LOGGER.debug("AsyncLogger closed.");
     }
 
     public void writeLine(String line)

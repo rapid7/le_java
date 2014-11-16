@@ -21,13 +21,13 @@ import java.io.Serializable;
 public final class LogentriesAppender extends AbstractAppender
 {
     private final LogentriesManager manager;
+
     protected LogentriesAppender(String name, Filter filter,
                                  Layout<? extends Serializable> layout, boolean ignoreExceptions,
                                  LogentriesManager manager)
     {
         super(name, filter, layout, ignoreExceptions);
         this.manager = manager;
-
     }
 
     @PluginFactory
@@ -54,6 +54,11 @@ public final class LogentriesAppender extends AbstractAppender
             LOGGER.error("No name provided for LogentriesAppender");
             return null;
         }
+        if (token == null)
+        {
+            LOGGER.error("No token provided for LogentriesAppender");
+            return null;
+        }
         FactoryData data = new FactoryData(token,
                 key, location, httpPut, ssl, debug,
                 useDataHub, dataHubAddr,
@@ -61,14 +66,11 @@ public final class LogentriesAppender extends AbstractAppender
                 logID);
         LogentriesManager manager = LogentriesManager.getManager(name, data);
         if (manager == null)
-        {
             return null;
-        }
 
         if (layout == null)
-        {
             layout = PatternLayout.createDefaultLayout();
-        }
+
         return new LogentriesAppender(name, filter, layout, ignoreExceptions, manager);
     }
 
@@ -76,7 +78,7 @@ public final class LogentriesAppender extends AbstractAppender
     public void append(LogEvent event)
     {
         final Layout<? extends Serializable> layout = getLayout();
-        byte[] bytes = layout.toByteArray(event);
-        manager.writeLine(new String(bytes));
+        String line = new String(layout.toByteArray(event));
+        manager.writeLine(line);
     }
 }
