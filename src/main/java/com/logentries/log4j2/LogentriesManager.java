@@ -53,6 +53,7 @@ public class LogentriesManager extends AbstractManager
     {
         return s == null ? "" : s;
     }
+
     @Override
     protected void releaseSub()
     {
