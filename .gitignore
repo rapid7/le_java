@@ -11,3 +11,5 @@ release.properties
 *.db
 .DS_Store
 
+# IDEA files
+atlassian-ide-plugin.xml

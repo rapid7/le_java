@@ -3,7 +3,8 @@
 
 	<properties>
 		<additionalparam>-Xdoclint:none</additionalparam>
-	</properties>
+        <jackson2Version>2.4.2</jackson2Version>
+    </properties>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -17,7 +18,7 @@
     <packaging>jar</packaging>
     <name>Logentries Appender</name>
     <version>1.1.28-SNAPSHOT</version>
-    <description>Contains logback and log4j appenders that will send log data to Logentries</description>
+    <description>Contains logback, log4j, and log4j2 appenders that will send log data to Logentries</description>
     <url>https://github.com/logentries/le_java</url>
     <licenses>
         <license>
@@ -113,6 +114,50 @@
             <version>1.2.17</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.1</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.1</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- Jackson 2 start -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson2Version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson2Version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>${jackson2Version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson2Version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+            <version>${jackson2Version}</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- Jackson 2 end -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
