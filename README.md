@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/logentries/le_java.png?branch=master)](https://travis-ci.org/logentries/le_java)
+
 Logging To Logentries from Java
 ==============================
 
