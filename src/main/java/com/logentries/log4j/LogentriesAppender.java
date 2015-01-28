@@ -149,17 +149,19 @@ public class LogentriesAppender extends AppenderSkeleton {
 		// Render the event according to layout
 		String formattedEvent = layout.format( event);
 
-		// Append stack trace if present
-		String[] stack = event.getThrowableStrRep();
-		if (stack != null)
-		{
-			int len = stack.length;
-			formattedEvent += ", ";
-			for(int i = 0; i < len; i++)
+		// Append stack trace if present and layout does not handle it
+		if (layout.ignoresThrowable()) {
+			String[] stack = event.getThrowableStrRep();
+			if (stack != null)
 			{
-				formattedEvent += stack[i];
-				if(i < len - 1)
-					formattedEvent += "\u2028";
+				int len = stack.length;
+				formattedEvent += ", ";
+				for(int i = 0; i < len; i++)
+				{
+					formattedEvent += stack[i];
+					if(i < len - 1)
+						formattedEvent += "\u2028";
+				}
 			}
 		}
 				
