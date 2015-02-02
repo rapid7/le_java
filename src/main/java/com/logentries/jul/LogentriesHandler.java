@@ -145,7 +145,6 @@ public final class LogentriesHandler extends Handler {
     void connect() {
         try {
             channel = SocketChannel.open();
-            channel.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
             channel.connect(new InetSocketAddress(host, port));
             open = true;
         } catch (IOException e) {
