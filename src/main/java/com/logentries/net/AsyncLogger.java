@@ -9,8 +9,6 @@ import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.helpers.LogLog;
-
 /**
  * Logentries Asynchronous Logger for integration with Java logging frameworks.
  *

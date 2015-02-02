@@ -6,6 +6,7 @@ Logging To Logentries from Java
 Logentries currently supports logging from Java using the following logging libraries:
 
 * [Log4J](https://github.com/logentries/le_java#log4j)
+* [Log4J2](https://github.com/logentries/le_java#log4j2)
 * [Logback](https://github.com/logentries/le_java#logback)
 
 --------------------------------------------------------------
@@ -19,7 +20,7 @@ logging. Select 'TOKEN TCP' as the source_type and click Register to create the 
 --------------------------------------------------------------
 
 LOG4J
-========
+=====
 
 To configure log4j, you will need to perform the following:
 
@@ -162,9 +163,147 @@ Example:
     log.info("Informational message");
     log.warn("Warning Message");
 
+LOG4J2
+======
+
+To configure log4j2, you will need to perform the following:
+
+    * (1) Install Log4j2 (if you are not already using it).
+    * (2) Install the Logentries appender.
+    * (3) Configure the Logentries appender.
+
+Maven Users
+-----------
+
+Place this in your pom.xml
+
+    <dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-api</artifactId>
+		<version>2.1</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-core</artifactId>
+		<version>2.1</version>
+	</dependency>
+    <dependency>
+		<groupId>com.logentries</groupId>
+		<artifactId>logentries-appender</artifactId>
+		<version>RELEASE</version>
+	</dependency>
+
+Manual Install
+--------------
+
+Download log4j2 from:
+
+http://logging.apache.org/log4j/2.0/download.html
+
+Retrieve log4j2 jar file and place it the `WEB-INF/lib` folder of your project.
+
+Then add it to the build path from within your project.
+
+The next file you need is logentriesappender-{VERSION}.jar which is the appender for log4j2. You can get it <a href="http://search.maven.org/remotecontent?filepath=com/logentries/logentries-appender/1.1.29/logentries-appender-1.1.29.jar">here.</a>
+
+Place this in the `WEB-INF/lib` folder of your project and add it to the buildpath as done above with log4j2 jar.
+
+Configure the Log4J2 plugin
+--------------------------
+
+Create a log4j2.xml file and include at least the following to log to logentries:
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Configuration status="WARN">
+		<Appenders>
+    		<Logentries >
+    			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss ZZZ} %F.%L level:%-5p%m"/>
+    			<name>le</name>
+    			<token>LOGENTRIES_TOKEN</token>
+    		</Logentries>
+    	</Appenders>
+    
+    	<Loggers>
+    		<Root level="INFO">
+    			<AppenderRef ref="le" />
+    		</Root>
+    	</Loggers>
+    </Configuration>
+
+Replace the value "LOGENTRIES_TOKEN" with the token UUID that is to the right of your newly created logfile.  Alternatively leave the Token entry empty in the log4j2 configuration and provide the token via an environment variable e.g., `export LOGENTRIES_TOKEN=bc0c4f90-a2d6-11e1-b3dd-0800200c9a66`.  This approach makes it easy to provide different logging tokens without repackaging when moving an app through dev, test, and prod etc.
+
+Maven users may put the file in their src/main/resources folder.
+
+DataHub Logging
+---------------
+
+To log to a DataHub we can change log4j2.xml configuration to send logs to your instance of DataHub.
+
+	<?xml version="1.0" encoding="UTF-8"?>
+    <Configuration status="WARN">
+    	<Appenders>
+    		<Logentries >
+    			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss ZZZ} %F.%L level:%-5p%m"/>
+    			<name>le</name>
+    			<token>LOGENTRIES_TOKEN</token>
+    			<debug>false</debug>
+    			<ignoreExceptions>false</ignoreExceptions>
+    			<!-- datahub specific options -->
+    			<logId></logId>
+    			<key>account_key</key>
+    			<useDataHub>true</useDataHub>
+    			<dataHubAddr>localhost</dataHubAddr>
+    			<location>my_datacentre</location>
+    			<dataHubPort>10000</dataHubPort>
+    			<logHostName>true</logHostName>
+    			<hostName>my_host</hostName>
+    			<logId>log_id</logId>
+    			<httpPut>false</httpPut>
+    		</Logentries>
+    	</Appenders>
+    
+    	<Loggers>
+    		<Root level="INFO">
+    			<AppenderRef ref="le" />
+    		</Root>
+    	</Loggers>
+    </Configuration>
+
+The extra parameters are the following,
+
+	<useDataHub>false</useDataHub>: Sent to a DataHub instance if true.
+	<dataHubAddr>localhost</dataHubAddr>: The IP of the DataHub instance that we will connect to.
+	<dataHubPort>10000</dataHubPort>: The Port of the DataHub instance that we will connect to.
+	<logHostName>true</logHostName>: Prefixes log messages with a HostName
+	<hostName>my_host</hostName>: The HostName to prefix each log message with. If not set will be automatically detected.
+	<logId>log_id</logId>: The LogID to be prefixed with each log message. If not set it will not be logged.
+
+
+Logging Messages
+----------------
+
+With that done, you are ready to send logs to Logentries.
+
+In each class you wish to log from, enter the following using directives at the top if not already there:
+
+	import org.apache.logging.log4j.Logger;
+	import org.apache.logging.log4j.LogManager;
+
+Then create this object at class-level:
+
+    private static Logger log = LogManager.getRootLogger();
+
+Now within your code in that class, you can log using log4j2 as normal and it will log to Logentries.
+
+Example:
+
+    log.debug("Debugging Message");
+    log.info("Informational message");
+    log.warn("Warning Message");
+
 
 LOGBACK
-==========
+=======
 
 To configure logback, you will need to perform the following:
 
