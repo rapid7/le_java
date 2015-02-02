@@ -40,7 +40,7 @@ public final class LogentriesHandler extends Handler {
     public LogentriesHandler() {
         configure();
         connect();
-        buffer = ByteBuffer.allocate(1024);
+        buffer = ByteBuffer.allocate(4096);
     }
 
     public String getHost() {
