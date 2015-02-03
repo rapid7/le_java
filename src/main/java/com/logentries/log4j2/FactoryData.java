@@ -22,13 +22,13 @@ class FactoryData
     private final boolean useDataHub;
     /** DataHubAddr - address of the server where DataHub instance resides. */
     private final String dataHubAddr;
-    /** DataHubPort - port on which DataHub instance waits for messages */
+    /** DataHubPort - port on which DataHub instance waits for messages. */
     private final int dataHubPort;
-    /** LogHostName - switch that determines whether HostName should be appended to the log message */
+    /** LogHostName - switch that determines whether HostName should be appended to the log message. */
     private final boolean logHostName;
-    /** HostName - value, that should be appended to the log message if logHostName is set to true */
+    /** HostName - value, that should be appended to the log message if logHostName is set to true. */
     private final String hostName;
-    /** LogID - user-defined ID string that is appended to the log message if non-empty */
+    /** LogID - user-defined ID string that is appended to the log message if non-empty. */
     private final String logID;
 
     FactoryData(String token, String key, String location, boolean httpPut, boolean ssl, boolean debug,

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Logentries >
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss ZZZ} %F.%L level:%-5p%m"/>
+            <name>le</name>
+            <token>LOGENTRIES_TOKEN</token>
+            <debug>false</debug>
+            <ignoreExceptions>false</ignoreExceptions>
+            <logId></logId>
+            <!-- datahub specific options -->
+            <key>account_key</key>
+            <useDataHub>false</useDataHub>
+            <dataHubAddr>localhost</dataHubAddr>
+            <location>my_datacentre</location>
+            <dataHubPort>10000</dataHubPort>
+            <logHostName>true</logHostName>
+            <hostName>my_host</hostName>
+            <httpPut>false</httpPut>
+        </Logentries>
+    </Appenders>
+
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="le" />
+        </Root>
+    </Loggers>
+</Configuration>
+
+
