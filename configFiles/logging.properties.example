@@ -1,7 +1,7 @@
 handlers = com.logentries.jul.LogentriesHandler
 .handlers = com.logentries.jul.LogentriesHandler
 
-com.logentries.jul.LogentriesHandler.token = f2ff093a-54c7-4305-9449-1dccda748347
+com.logentries.jul.LogentriesHandler.token = LOGENTRIES_TOKEN
 com.logentries.jul.LogentriesHandler.port = 10000
 com.logentries.jul.LogentriesHandler.host = data.logentries.com
 com.logentries.jul.LogentriesHandler.formatter = java.util.logging.SimpleFormatter
