@@ -233,13 +233,6 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	protected void append(ILoggingEvent event) {
 		// Render the event according to layout
 		String formattedEvent = layout.doLayout(event);
-
-		// Append stack trace if present
-		IThrowableProxy error = event.getThrowableProxy();
-		if (error != null) {
-			formattedEvent += ExceptionFormatter.formatException(error);
-		}
-
 		// Prepare to be queued
 		this.le_async.addLineToQueue(formattedEvent);
 	}
