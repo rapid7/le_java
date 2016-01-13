@@ -419,7 +419,7 @@ public class AsyncLogger {
 	}
 
 	private void addLineToQueue (String line, int limit) {
-		if (limit == 0) { throw new LogTooLongException(); }
+		if (limit == 0) { return; }
 
 		//// Check credentials only if logs are sent to LE directly.
 		// Check that we have all parameters set and socket appender running.
