@@ -272,12 +272,12 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 
 	public Layout<ILoggingEvent> buildLayout() {
 		PatternLayout l = new PatternLayout();
+		l.setContext(getContext());
 		l.getInstanceConverterMap().put("syslogStart", SyslogStartConverter.class.getName());
 		if (suffixPattern == null) {
 			suffixPattern = DEFAULT_SUFFIX_PATTERN;
 		}
 		l.setPattern(getPrefixPattern() + suffixPattern);
-		l.setContext(getContext());
 		l.start();
 		return l;
 	}
