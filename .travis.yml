@@ -4,3 +4,6 @@ jdk:
   - openjdk7
   - oraclejdk7
   - oraclejdk8
+before_install:
+  # override default MAVEN_OPTS
+  - echo "MAVEN_OPTS='-Xms1g -Xmx2g -XX:MaxPermSize=512m'" > ~/.mavenrc

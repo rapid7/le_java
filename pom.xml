@@ -78,7 +78,7 @@
                 <version>2.19.1</version>
                 <configuration>
                     <!-- Travis build workaround -->
-                    <argLine>-Xms1024m -Xmx2048m</argLine>
+                    <argLine>${surefire.jvm.params}</argLine>
                 </configuration>
             </plugin>
         </plugins>
