@@ -4,3 +4,11 @@ jdk:
   - openjdk7
   - oraclejdk7
   - oraclejdk8
+before_install:
+  # override default MAVEN_OPTS
+  - echo "MAVEN_OPTS='-Xms1g -Xmx2g -XX:MaxPermSize=512m'" > ~/.mavenrc
+  # Fix OpenJDK buffer overflow
+  - cat /etc/hosts # optionally check the content *before*
+  - sudo hostname "$(hostname | cut -c1-63)"
+  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
+  - cat /etc/hosts # optionally check the content *after*

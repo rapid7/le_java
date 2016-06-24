@@ -1,6 +1,9 @@
 package com.logentries.net;
 
 import org.junit.Test;
+
+import java.util.Random;
+
 import static org.junit.Assert.*;
 
 public class AsyncLoggerTest {
@@ -17,6 +20,21 @@ public class AsyncLoggerTest {
 	}
 
 	@Test
+    public void testOversizeMessage()
+    {
+        AsyncLogger async = new AsyncLogger();
+        char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 2100000; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        String output = sb.toString();
+        async.addLineToQueue(output);
+    }
+
+    @Test
 	public void testGetAndSetHttpPut()
 	{
 		AsyncLogger async = new AsyncLogger();

@@ -270,8 +270,8 @@ public class AsyncLogger {
 	 *
 	 * @param logHostName
 	 */
-	public void setLogHostName(boolean logHostName) { 
-		this.logHostName = logHostName; 
+	public void setLogHostName(boolean logHostName) {
+		this.logHostName = logHostName;
 	}
 
 	/**
@@ -279,8 +279,8 @@ public class AsyncLogger {
 	 *
 	 * @return logHostName switch value
 	 */
-	public boolean getLogHostName() { 
-		return this.logHostName; 
+	public boolean getLogHostName() {
+		return this.logHostName;
 	}
 
 	/**
@@ -288,8 +288,8 @@ public class AsyncLogger {
 	 *
 	 * @param hostName
 	 */
-	public void setHostName(String hostName) { 
-		this.hostName = hostName; 
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
 	}
 
 	/**
@@ -297,8 +297,8 @@ public class AsyncLogger {
 	 *
 	 * @return Host name field value
 	 */
-	public String getHostName() { 
-		return this.hostName; 
+	public String getHostName() {
+		return this.hostName;
 	}
 
 	/**
@@ -306,8 +306,8 @@ public class AsyncLogger {
 	 *
 	 * @param logID
 	 */
-	public void setLogID(String logID) { 
-		this.logID = logID; 
+	public void setLogID(String logID) {
+		this.logID = logID;
 	}
 
 	/**
@@ -315,8 +315,8 @@ public class AsyncLogger {
 	 *
 	 * @return logID field value
 	 */
-	public String getLogID() { 
-		return this.logID; 
+	public String getLogID() {
+		return this.logID;
 	}
 
 	/**
@@ -419,7 +419,9 @@ public class AsyncLogger {
 	}
 
 	private void addLineToQueue (String line, int limit) {
-		if (limit == 0) { throw new LogTooLongException(); }
+		if (limit == 0) {
+            dbg("Message longer than " + RECURSION_LIMIT);
+            return; }
 
 		//// Check credentials only if logs are sent to LE directly.
 		// Check that we have all parameters set and socket appender running.
