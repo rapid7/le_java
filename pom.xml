@@ -78,6 +78,7 @@
                 <version>2.19.1</version>
                 <configuration>
                     <!-- Travis build workaround -->
+                    <forkCount>1</forkCount>
                     <argLine>${surefire.jvm.params}</argLine>
                 </configuration>
             </plugin>
