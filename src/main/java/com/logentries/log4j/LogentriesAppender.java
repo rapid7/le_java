@@ -152,21 +152,25 @@ public class LogentriesAppender extends AppenderSkeleton {
 		// Append stack trace if present and layout does not handle it
 		if (layout.ignoresThrowable()) {
 			String[] stack = event.getThrowableStrRep();
-			if (stack != null)
-			{
-				int len = stack.length;
-				formattedEvent += ", ";
-				for(int i = 0; i < len; i++)
-				{
-					formattedEvent += stack[i];
-					if(i < len - 1)
-						formattedEvent += "\u2028";
-				}
-			}
+			if (stack != null && stack.length > 0)
+				formattedEvent = appendFormatedEvent(formattedEvent, stack);
 		}
 				
 		// Prepare to be queued
 		this.le_async.addLineToQueue(formattedEvent);
+	}
+	private static final String EXCEPTION_SEPARATOR = ", ";
+	
+	static String appendFormatedEvent(String formattedEvent, final String[] stack) {
+		final int len = stack.length;
+		formattedEvent += EXCEPTION_SEPARATOR;
+		for(int i = 0; i < len; i++)
+		{
+			formattedEvent += stack[i];
+			if(i < len - 1)
+				formattedEvent += "\u2028";
+		}
+		return formattedEvent;
 	}
 
 	/**
