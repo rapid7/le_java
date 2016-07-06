@@ -161,16 +161,31 @@ public class LogentriesAppender extends AppenderSkeleton {
 	}
 	private static final String EXCEPTION_SEPARATOR = ", ";
 	
-	static String appendFormatedEvent(String formattedEvent, final String[] stack) {
+	static String appendFormatedEvent(final String formattedEvent, final String[] stack) {
 		final int len = stack.length;
-		formattedEvent += EXCEPTION_SEPARATOR;
-		for(int i = 0; i < len; i++)
-		{
-			formattedEvent += stack[i];
-			if(i < len - 1)
-				formattedEvent += "\u2028";
+		
+		// calculate buffer size
+		int buffSize = formattedEvent.length()
+		             + EXCEPTION_SEPARATOR.length()
+		             + len - 1
+		             ;
+		for (int i = 0; i < len; i++) {
+			buffSize += stack[i].length();
 		}
-		return formattedEvent;
+		
+		// concatenate 
+		final StringBuilder sb = new StringBuilder(buffSize);
+		sb.append(formattedEvent);
+		sb.append(EXCEPTION_SEPARATOR);
+	
+		for (int i = 0; i < len; i++) {
+			sb.append(stack[i]);
+			if (i < len - 1) {
+				sb.append('\u2028');
+			}
+		}
+		// assert sb.capacity() == sb.length();
+		return sb.toString();
 	}
 
 	/**
