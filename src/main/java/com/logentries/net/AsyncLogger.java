@@ -107,7 +107,9 @@ public class AsyncLogger {
 	 */
 	public void setToken( String token) {
 		this.token = token;
-		dbg( "Setting token to " + token);
+		if (debug) {
+			dbg( "Setting token to " + token);
+		}
 	}
 
 	/**
@@ -420,7 +422,9 @@ public class AsyncLogger {
 
 	private void addLineToQueue (String line, int limit) {
 		if (limit == 0) {
-            dbg("Message longer than " + RECURSION_LIMIT);
+			if (debug) {
+				dbg("Message longer than " + RECURSION_LIMIT);
+			}
             return; }
 
 		//// Check credentials only if logs are sent to LE directly.
@@ -432,7 +436,9 @@ public class AsyncLogger {
 			started = true;
 		}
 
-		dbg("Queueing " + line);
+		if (debug) {
+			dbg("Queueing " + line);
+		}
 
 		// If individual string is too long add it to the queue recursively as sub-strings
 		if (line.length() > LOG_LENGTH_LIMIT) {
@@ -553,7 +559,9 @@ public class AsyncLogger {
 				if (root_delay > MAX_DELAY)
 					root_delay = MAX_DELAY;
 				int wait_for = root_delay + random.nextInt( root_delay);
-				dbg( "Waiting for " + wait_for + "ms");
+				if (debug) {
+					dbg( "Waiting for " + wait_for + "ms");
+				}
 				Thread.sleep( wait_for);
 			}
 		}
@@ -666,7 +674,9 @@ public class AsyncLogger {
 			} catch (InterruptedException e) {
 				// We got interrupted, stop
 				dbg( "Asynchronous socket writer interrupted");
-				dbg("Queue had "+queue.size()+" lines left in it");
+				if (debug) {
+					dbg("Queue had "+queue.size()+" lines left in it");
+				}
 			}
 
 			closeConnection();
