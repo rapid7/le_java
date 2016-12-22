@@ -1,8 +1,13 @@
 package com.logentries.log4j2;
 
-import com.logentries.net.AsyncLogger;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.AbstractManager;
 import org.apache.logging.log4j.core.appender.ManagerFactory;
+import org.apache.logging.log4j.core.async.AsyncLoggerContext;
+
+import com.logentries.net.AsyncLogger;
 
 /**
  * Responsible for managing the actual connection to Logentries.
@@ -22,15 +27,15 @@ public class LogentriesManager extends AbstractManager
         @Override
         public LogentriesManager createManager(String name, FactoryData data)
         {
-            return new LogentriesManager(name,data);
+            return new LogentriesManager(new AsyncLoggerContext(name), name, data);
         }
     }
 
     private final AsyncLogger asyncLogger;
 
-    protected LogentriesManager(String name, FactoryData data)
+    protected LogentriesManager(LoggerContext loggerContext, String name, FactoryData data)
     {
-        super(name);
+        super(loggerContext, name);
         asyncLogger = new AsyncLogger();
         asyncLogger.setToken(data.getToken());
         asyncLogger.setKey(data.getKey());
@@ -55,11 +60,11 @@ public class LogentriesManager extends AbstractManager
     }
 
     @Override
-    protected void releaseSub()
+    protected boolean releaseSub(final long timeout, final TimeUnit timeUnit)
     {
-        super.releaseSub();
         asyncLogger.close();
         LOGGER.debug("AsyncLogger closed.");
+        return super.releaseSub(timeout, timeUnit);
     }
 
     public void writeLine(String line)
