@@ -5,6 +5,7 @@
 		<additionalparam>-Xdoclint:none</additionalparam>
         <jackson2Version>2.4.2</jackson2Version>
         <log4j2Version>2.7</log4j2Version>
+        <disruptorVersion>3.3.6</disruptorVersion>
     </properties>
 
     <parent>
@@ -18,7 +19,7 @@
     <artifactId>logentries-appender</artifactId>
     <packaging>jar</packaging>
     <name>Logentries Appender</name>
-    <version>1.1.36-SNAPSHOT</version>
+    <version>1.1.37-SNAPSHOT</version>
     <description>Contains logback, log4j, and log4j2 appenders that will send log data to Logentries</description>
     <url>https://github.com/logentries/le_java</url>
     <licenses>
@@ -145,6 +146,11 @@
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>${disruptorVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
