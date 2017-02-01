@@ -27,7 +27,7 @@ public class LogentriesManager extends AbstractManager
         @Override
         public LogentriesManager createManager(String name, FactoryData data)
         {
-            return new LogentriesManager(new AsyncLoggerContext(name), name, data);
+            return new LogentriesManager(new LoggerContext(name), name, data);
         }
     }
 
@@ -64,7 +64,7 @@ public class LogentriesManager extends AbstractManager
     {
         asyncLogger.close();
         LOGGER.debug("AsyncLogger closed.");
-        return super.releaseSub(timeout, timeUnit);
+        return true;
     }
 
     public void writeLine(String line)

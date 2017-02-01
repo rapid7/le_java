@@ -27,5 +27,8 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="Logentries"/>
         </Root>
+        <AsyncLogger name="test-async-logger" level="INFO">
+            <AppenderRef ref="Logentries" />
+        </AsyncLogger>
     </Loggers>
 </Configuration>
