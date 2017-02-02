@@ -420,8 +420,9 @@ public class AsyncLogger {
 
 	private void addLineToQueue (String line, int limit) {
 		if (limit == 0) {
-            dbg("Message longer than " + RECURSION_LIMIT);
-            return; }
+            dbg("Message longer than " + RECURSION_LIMIT * LOG_LENGTH_LIMIT);
+            return;
+		}
 
 		//// Check credentials only if logs are sent to LE directly.
 		// Check that we have all parameters set and socket appender running.

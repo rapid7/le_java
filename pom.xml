@@ -151,6 +151,7 @@
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
             <version>${disruptorVersion}</version>
+           <optional>true</optional> 
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
