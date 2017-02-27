@@ -22,20 +22,20 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	/**
 	 * Asynchronous Background logger
 	 */
-	private final AsyncLogger le_async;
+	protected final AsyncLogger le_async;
 	/**
 	 * Layout
 	 */
-	private Layout<ILoggingEvent> layout;
+	protected Layout<ILoggingEvent> layout;
 	/**
 	 * Facility String
 	 */
-	private String facilityStr;
+	protected String facilityStr;
 	/**
 	 * Default Suffix Pattern
 	 */
 	public static final String DEFAULT_SUFFIX_PATTERN = "[%thread] %logger %msg";
-	private String suffixPattern;
+	protected String suffixPattern;
 
 	/**
 	 * Creates a new Logentries appender.
