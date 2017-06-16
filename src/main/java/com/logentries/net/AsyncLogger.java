@@ -505,22 +505,17 @@ public class AsyncLogger {
 		 * @throws IOException
 		 */
 		void openConnection() throws IOException {
-			try{
-				if(this.le_client == null){
-					this.le_client = new LogentriesClient(httpPut, ssl, useDataHub, dataHubAddr, dataHubPort);
-				}
+			if (this.le_client == null) {
+				this.le_client = new LogentriesClient(httpPut, ssl, useDataHub, dataHubAddr, dataHubPort);
+			}
 
-				this.le_client.connect();
+			this.le_client.connect();
 
-				if(httpPut){
-					final String f = "PUT /%s/hosts/%s/?realtime=1 HTTP/1.1\r\n\r\n";
-					final String header = String.format( f, key, location);
-					byte[] temp = header.getBytes( ASCII);
-					this.le_client.write( temp, 0, temp.length);
-				}
-
-			}catch(Exception e){
-
+			if (httpPut) {
+				final String f = "PUT /%s/hosts/%s/?realtime=1 HTTP/1.1\r\n\r\n";
+				final String header = String.format(f, key, location);
+				byte[] temp = header.getBytes(ASCII);
+				this.le_client.write(temp, 0, temp.length);
 			}
 		}
 
@@ -657,7 +652,8 @@ public class AsyncLogger {
 						try {
 							this.le_client.write( finalLine, 0, finalLine.length);
 						} catch (IOException e) {
-							// Reopen the lost connection
+                            dbg("Existing connection is lost, will try to reestablish.");
+                            // Reopen the lost connection
 							reopenConnection();
 							continue;
 						}
