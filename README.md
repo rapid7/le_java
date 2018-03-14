@@ -30,3 +30,10 @@ Maximum Log Length
 Currently logs which exceed 65536 characters in length, including any patterns and timestamps you may include, will be split and sent as multiple logs.
 
 -------
+
+Contact Support
+==================
+
+Please email our support team at support@logentries.com if you need any help.
+
+-------
