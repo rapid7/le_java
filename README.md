@@ -1,5 +1,6 @@
 # Using InsightOps?
-Please use our updated [library](https://github.com/rapid7/r7insight_java) which supports specifying the region to send your log data to.
+Please use our updated [libraries] which support specifying the region to send your log data to: 
+[Log4j](https://insightops.help.rapid7.com/docs/log4j-log4j2), [Logback](https://insightops.help.rapid7.com/docs/logback), and [JavaUtil](https://insightops.help.rapid7.com/docs/java-util-logging)
 
 [![Build Status](https://travis-ci.org/logentries/le_java.png?branch=master)](https://travis-ci.org/logentries/le_java)
 
