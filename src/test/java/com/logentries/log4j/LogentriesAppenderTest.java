@@ -1,5 +1,6 @@
 package com.logentries.log4j;
 
+import static com.logentries.log4j.LogentriesAppender.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -26,4 +27,8 @@ public class LogentriesAppenderTest {
 		assertEquals(le.le_async.getSsl(),true);
 	}
 
+	@Test
+	public void testAppendFormatedEvent() {
+	    assertEquals("foo, a\u2028b\u2028c", appendFormatedEvent("foo", new String[]{"a","b", "c"}));    
+	}
 }
