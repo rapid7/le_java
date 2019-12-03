@@ -20,6 +20,10 @@ import com.logentries.net.AsyncLogger;
 public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 
 	/**
+	 * 
+	 */
+	private boolean useExceptionFormatter;
+	/**
 	 * Asynchronous Background logger
 	 */
 	private final AsyncLogger le_async;
@@ -53,6 +57,10 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 		this.le_async = logger;
 	}
 
+	protected AsyncLogger getAsyncLogger() {
+		return le_async;
+	}
+	
 	/*
 	 * Public methods to send logback parameters to AsyncLogger
 	 */
@@ -63,6 +71,13 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	 */
 	public void setToken(String token) {
 		this.le_async.setToken(token);
+	}
+	
+	/**
+	 * Set whether to use com.logentries.logback.ExceptionFormatter when creating default layout
+	 */
+	public void setUseExceptionFormatter(boolean value) {
+		this.useExceptionFormatter = value;
 	}
 
 	/**
@@ -233,6 +248,15 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 	protected void append(ILoggingEvent event) {
 		// Render the event according to layout
 		String formattedEvent = layout.doLayout(event);
+		
+		// Append stack trace if present
+		if (useExceptionFormatter) {
+			IThrowableProxy error = event.getThrowableProxy();
+			if (error != null) {
+				formattedEvent += ExceptionFormatter.formatException(error);
+			}
+		}
+		
 		// Prepare to be queued
 		this.le_async.addLineToQueue(formattedEvent);
 	}
@@ -248,12 +272,12 @@ public class LogentriesAppender extends AppenderBase<ILoggingEvent> {
 
 	public Layout<ILoggingEvent> buildLayout() {
 		PatternLayout l = new PatternLayout();
+		l.setContext(getContext());
 		l.getInstanceConverterMap().put("syslogStart", SyslogStartConverter.class.getName());
 		if (suffixPattern == null) {
 			suffixPattern = DEFAULT_SUFFIX_PATTERN;
 		}
 		l.setPattern(getPrefixPattern() + suffixPattern);
-		l.setContext(getContext());
 		l.start();
 		return l;
 	}
