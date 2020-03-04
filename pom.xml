@@ -3,7 +3,7 @@
 
 	<properties>
 		<additionalparam>-Xdoclint:none</additionalparam>
-        <jackson2Version>2.4.2</jackson2Version>
+        <jackson2Version>2.10.3</jackson2Version>
         <log4j2Version>2.7</log4j2Version>
         <disruptorVersion>3.3.6</disruptorVersion>
     </properties>
